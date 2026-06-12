@@ -14,6 +14,8 @@ __attributes = {
     'SLat': 'structured_latent',
     'TextConditionedSLat': 'structured_latent',
     'ImageConditionedSLat': 'structured_latent',
+
+    'VideoConditionedSLat': 'video_structured_latent',
 }
 
 __submodules = []
@@ -55,4 +57,6 @@ if __name__ == '__main__':
         TextConditionedSLat,
         ImageConditionedSLat,
     )
+
+    from .video_structured_latent import VideoConditionedSLat
     

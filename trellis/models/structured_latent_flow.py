@@ -66,6 +66,31 @@ class SparseResBlock3d(nn.Module):
         return h
     
 
+class TemporalProjector(nn.Module):
+    """
+    Maps a temporal scalar τ ∈ [0,1] and pooled conditioning tokens to a delta
+    that is added to the timestep embedding, enabling continuous texture modulation
+    without changing geometry.
+    """
+    def __init__(self, model_channels: int, cond_channels: int, hidden_size: int = 256):
+        super().__init__()
+        self.tau_embedder = TimestepEmbedder(hidden_size)
+        self.cond_proj = nn.Linear(cond_channels, hidden_size)
+        self.mlp = nn.Sequential(
+            nn.SiLU(),
+            nn.Linear(2 * hidden_size, hidden_size),
+            nn.SiLU(),
+            nn.Linear(hidden_size, model_channels),
+        )
+
+    def forward(self, tau: torch.Tensor, cond: torch.Tensor) -> torch.Tensor:
+        # tau: (B,)   cond: (B, N, cond_channels)
+        tau_emb = self.tau_embedder(tau * 1000)         # (B, hidden_size)
+        cond_pooled = self.cond_proj(cond.float().mean(dim=1))  # (B, hidden_size)
+        fused = torch.cat([tau_emb, cond_pooled], dim=-1)
+        return self.mlp(fused)                           # (B, model_channels)
+
+
 class SLatFlowModel(nn.Module):
     def __init__(
         self,
@@ -88,6 +113,8 @@ class SLatFlowModel(nn.Module):
         share_mod: bool = False,
         qk_rms_norm: bool = False,
         qk_rms_norm_cross: bool = False,
+        use_temporal_modulation: bool = False,
+        temporal_proj_hidden: int = 256,
     ):
         super().__init__()
         self.resolution = resolution
@@ -108,6 +135,7 @@ class SLatFlowModel(nn.Module):
         self.share_mod = share_mod
         self.qk_rms_norm = qk_rms_norm
         self.qk_rms_norm_cross = qk_rms_norm_cross
+        self.use_temporal_modulation = use_temporal_modulation
         self.dtype = torch.float16 if use_fp16 else torch.float32
 
         if self.io_block_channels is not None:
@@ -115,6 +143,10 @@ class SLatFlowModel(nn.Module):
             assert np.log2(patch_size) == len(io_block_channels), "Number of IO ResBlocks must match the number of stages"
 
         self.t_embedder = TimestepEmbedder(model_channels)
+        self.temporal_projector = (
+            TemporalProjector(model_channels, cond_channels, temporal_proj_hidden)
+            if use_temporal_modulation else None
+        )
         if share_mod:
             self.adaLN_modulation = nn.Sequential(
                 nn.SiLU(),
@@ -237,9 +269,26 @@ class SLatFlowModel(nn.Module):
         nn.init.constant_(self.out_layer.weight, 0)
         nn.init.constant_(self.out_layer.bias, 0)
 
-    def forward(self, x: sp.SparseTensor, t: torch.Tensor, cond: torch.Tensor) -> sp.SparseTensor:
+        # Zero-init temporal projector output so it starts as identity (no change)
+        if self.temporal_projector is not None:
+            nn.init.zeros_(self.temporal_projector.mlp[-1].weight)
+            nn.init.zeros_(self.temporal_projector.mlp[-1].bias)
+
+    def forward(
+        self,
+        x: sp.SparseTensor,
+        t: torch.Tensor,
+        cond: torch.Tensor,
+        tau: Optional[torch.Tensor] = None,
+    ) -> sp.SparseTensor:
         h = self.input_layer(x).type(self.dtype)
         t_emb = self.t_embedder(t)
+
+        # inject temporal delta into the timestep embedding before adaLN
+        if tau is not None and self.temporal_projector is not None:
+            delta_t = self.temporal_projector(tau, cond)
+            t_emb = t_emb + delta_t.type(t_emb.dtype)
+
         if self.share_mod:
             t_emb = self.adaLN_modulation(t_emb)
         t_emb = t_emb.type(self.dtype)

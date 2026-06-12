@@ -1,0 +1,1 @@
+python train.py --config configs/generation/dynamic_texture_flow_img_dit_L_64l8p2_fp16.json --output_dir outputs/dynamic_texture_test --data_dir /path/to/your/data --num_gpus 1 --tryrun
