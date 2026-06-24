@@ -93,8 +93,8 @@ def render(viewpoint_camera, pc : Gaussian, pipe, bg_color : torch.Tensor, scali
     means2D = screenspace_points
     opacity = pc.get_opacity
 
-    # If precomputed 3d covariance is provided, use it. If not, then it will be computed from
-    # scaling / rotation by the rasterizer.
+    # Precompute 3D covariance in Python to bypass potential CUDA overflow
+    # in the rasterizer's scale/rotation → covariance kernel.
     scales = None
     rotations = None
     cov3D_precomp = None
@@ -120,7 +120,7 @@ def render(viewpoint_camera, pc : Gaussian, pipe, bg_color : torch.Tensor, scali
     else:
         colors_precomp = override_color
 
-    # Rasterize visible Gaussians to image, obtain their radii (on screen). 
+    # Rasterize visible Gaussians to image, obtain their radii (on screen).
     rendered_image, radii = rasterizer(
         means3D = means3D,
         means2D = means2D,
@@ -152,7 +152,7 @@ class GaussianRenderer:
         self.pipe = edict({
             "kernel_size": 0.1,
             "convert_SHs_python": False,
-            "compute_cov3D_python": False,
+            "compute_cov3D_python": True,
             "scale_modifier": 1.0,
             "debug": False
         })

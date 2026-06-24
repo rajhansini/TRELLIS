@@ -25,9 +25,6 @@
     "dataset": {
         "name": "VideoConditionedSLat",
         "args": {
-            "roots": [
-                "/net/projects/ranalab/rajhansini/TRELLIS/data/dynamic_sequences"
-            ],
             "image_size": 518,
             "normalization": {
                 "mean": [

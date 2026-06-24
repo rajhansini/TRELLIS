@@ -1,0 +1,1 @@
+python /net/projects/ranalab/rajhansini/TRELLIS/train.py --config /net/projects/ranalab/rajhansini/TRELLIS/configs/generation/dynamic_texture_flow_img_dit_L_64l8p2_fp16.json --output_dir /net/projects/ranalab/rajhansini/TRELLIS/outputs/dynamic_texture_demo --num_gpus 1
