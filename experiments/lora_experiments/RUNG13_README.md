@@ -455,32 +455,246 @@ Step 3 will refuse to start if step 1 has not run.
 
 ---
 
-## 11. File map
+## 11. Every file, in detail
 
-| file | what it is |
-|---|---|
-| `rung13_aligned_colonly_lora.py` | the run. One-variable diff from its parent |
-| `rung5_colonly_lora.py` | the parent, unmodified — the baseline rung13 is compared against |
-| `visibility/solve_mesh_alignment.py` | the 7-DOF solver (coarse grid + Adam through nvdiffrast) |
-| `visibility/alignment/alignment.json` | the solved transform + per-frame IoU before/after |
-| `visibility/test_alignment_compensation.py` | the preregistered falsification test |
-| `visibility/render_colonly_comparison.py` | 150-frame fixed-camera video (the dynamic effect) |
-| `visibility/render_colonly_orbit.py` | 360° turntable (the 3D-consistency check) |
-| `visibility/jobs/*.sbatch` | launch scripts for each of the above |
-
-Upstream files worth reading when you need ground truth about the model:
-
-| file | why |
-|---|---|
-| `trellis/representations/mesh/cube2mesh.py` | the `out_layer` channel layout |
-| `trellis/representations/mesh/utils_cube.py` | how per-cube values become vertices; `con_loss` |
-| `trellis/models/structured_latent_vae/decoder_mesh.py` | decoder forward — blocks, then upsamplers, then `out_layer` |
-| `trellis/modules/sparse/transformer/modulated.py` | the SLaT flow block: `self_attn` + `cross_attn` |
-| `trellis/renderers/mesh_renderer.py` | proves colour is per-vertex and there are no UVs |
+Run order is: **solve → verify → train → render**. Each file below says what it
+consumes, what it produces, and what to look at in its log.
 
 ---
 
-## 12. Where this is going next
+### `visibility/solve_mesh_alignment.py` — **run this first**
+
+**Job:** find the 7 numbers that put the mesh where the video's object is.
+
+**Consumes:** `runs/<parent>/slat_cache.npz` (the per-frame latents), the GT video
+frames.
+**Produces:** `visibility/alignment/alignment.json`, `alignment.png`.
+
+**How it works:**
+
+| function | what it does |
+|---|---|
+| `rodrigues(rv)` | turns a 3-number rotation vector into a 3×3 rotation matrix. Differentiable, so Adam can optimise the 3 numbers directly |
+| `apply_sim3(v, log_s, rv, t, centre)` | the transform itself: `s·R·(v−c) + c + t`. Scale is stored as `log_s` so it can never go negative |
+| `render_soft_mask(...)` | renders the silhouette as a **soft** mask in [0,1] rather than a hard yes/no. Soft = differentiable = Adam has something to descend |
+| `soft_iou_loss(soft, gt)` | `1 − IoU`. Scale-free, unlike a plain pixel L2 |
+| `hard_iou(...)` | the honest yes/no IoU, used only for reporting |
+
+**Two stages, and the reason matters:** silhouette gradients exist *only at the
+object's boundary*. Started from identity, the two outlines barely touch, so the
+gradient is ~0 and Adam sits still. So stage 1 is a brute-force grid (585
+combinations of scale/tx/ty) to get into the right neighbourhood, and stage 2 is Adam
+on all 7 DOF from there.
+
+**Read in the log:** `[STAGE 1] best grid point`, then `[SOLVED]`, then
+`[VALIDATE] silhouette IoU before … after …`. The validate number is on frames the
+solve never saw — that is the number to trust.
+
+---
+
+### `visibility/alignment/alignment.json` — the answer, 7 numbers
+
+```json
+{ "scale": 0.8903,
+  "rotvec": [-0.1091, 0.0015, -0.0530],
+  "translation": [0.0412, -0.0472, 0.0013],
+  "centre": [...],
+  "iou_before": 0.7596, "iou_after": 0.9051 }
+```
+
+Every later script reads this file. If it is missing, `rung13` refuses to start rather
+than silently training unaligned — that refusal is deliberate.
+
+---
+
+### `visibility/test_alignment_compensation.py` — **run this second**
+
+**Job:** try to *disprove* our own explanation before spending a training run on it.
+
+**Consumes:** `alignment.json` + the parent's already-trained `lora_best.pt`.
+**Produces:** `compensation_test/compensation.json` and comparison images.
+**Trains nothing.** ~40 seconds.
+
+**The logic:** if the adapter really baked in a compensating shift, then putting the
+*old* adapter on the *newly aligned* mesh double-counts the compensation and must make
+things worse **in a predictable direction**.
+
+| function | what it does |
+|---|---|
+| `ncc_peak(a, b, maxshift)` | 2D normalised cross-correlation via FFT. Slides image `a` over image `b` and reports the offset with the best match. If the texture is displaced, the peak sits at a non-zero `dx` |
+| `lum_masked(rgb)` | converts to brightness and zeroes the background, so the silhouette does not dominate the correlation |
+
+**Thresholds were written into the script before it ran** (≥8 px confirm, ≤3 px
+refute, in between = inconclusive). That is what makes it evidence rather than a story
+fitted afterwards.
+
+**Read in the log:** the `VERDICT:` line.
+
+---
+
+### `rung5_colonly_lora.py` — the parent (do not edit)
+
+The baseline rung13 is measured against. It contains everything except the alignment:
+the LoRA definition, the two-pass splice, the training loop, the gates, the evaluation.
+
+| piece | what it is |
+|---|---|
+| `LoRALayer` | one low-rank adapter: `delta = B @ (A @ x)`. `A` is random-init, **`B` is zero-init**, so at step 0 the adapter outputs exactly zero and the model is untouched. That is why training always starts as the identity |
+| `DecBlockLoRABundle` | four `LoRALayer`s — one each for `attn.to_qkv`, `attn.to_out`, `mlp.mlp[0]`, `mlp.mlp[2]` — i.e. one decoder block's worth |
+| `DecLoRARegistry` | a bundle per active block. 12 blocks × 12,288 × rank 4 = **589,824 parameters** |
+| `dec_block_lora_ctx` | a context manager that installs 48 PyTorch **forward hooks** (12 blocks × 4 layers) on entry and removes them on exit. A hook intercepts a layer's output and lets us add the LoRA delta **without editing TRELLIS's code or weights** |
+| `colonly_forward` | the two-pass splice from §3. The heart of the method |
+| `masked_loss` | MSE + 0.1 × LPIPS over a masked region |
+| `evaluate_frames` | PSNR / SSIM / LPIPS on the held-out frames |
+| `precompute_slats` | runs stages A–C once for all 150 frames and caches them, so training only ever runs stages D–F |
+
+---
+
+### `rung13_aligned_colonly_lora.py` — the run
+
+A **copy** of the parent with one change. Reading the two side by side (`diff`) is the
+fastest way to understand exactly what the experiment is.
+
+| added | what it does |
+|---|---|
+| `--alignment` + the `ALIGN_*` constants | loads `alignment.json` at startup; raises if absent |
+| `_rodrigues`, `align_vertices` | rebuild the transform as torch tensors on the GPU |
+| `render_mesh(..., aligned=True)` | applies the transform. **The single choke point** — every render in the file goes through here, so training, eval, diagnostics and gates cannot disagree about the geometry |
+| static-mask recompute | `mask.png` was a cached silhouette of the *unaligned* render and is stale once the mesh moves; recomputed from the aligned frozen mesh |
+| `GATE-align` | refuses to start unless IoU improves by > 0.05 |
+| `logs/epoch_metrics.csv` | per-epoch CSV the parent did not have |
+
+**Outputs** land in `runs/rung13_aligned_r4_s6_<hash>/`:
+
+```
+train.log                  everything printed, tee'd live
+loss_history.json          per-epoch losses and metrics
+logs/epoch_metrics.csv     the same, as a spreadsheet
+logs/alignment_applied.json  proof the transform reached the renderer
+lora_ckpts/lora_e###.pt    per-epoch checkpoints (enables resume)
+lora_ckpts/lora_best.pt    best held-out PSNR — what the render scripts load
+diag_renders/e###/         GT | frozen | ours strips every 5 epochs
+final_eval.json            the headline numbers
+```
+
+The `<hash>` in the directory name is an md5 of the config, so **changing any
+hyper-parameter automatically creates a new run directory** and you can never
+accidentally overwrite or resume into a different experiment.
+
+---
+
+### `visibility/render_colonly_comparison.py` — the **dynamic** video
+
+**Job:** show the texture evolving over time. **Camera never moves**; the frame index
+advances 1 → 150.
+
+**Produces:** `GT_vs_frozen_vs_result.mp4` — three panels, `GT │ frozen │ ours`.
+
+Pass `--alignment` to reproduce rung13's render; omit it for the parent. Each panel
+label carries the live vertex count and a `SAME`/`DIFF` tag, and the script prints
+`vertex-count mismatches: 0/150` at the end — that is the geometry-is-frozen proof,
+re-verified on every render rather than assumed.
+
+**This is the video for showing the dynamic effect.**
+
+---
+
+### `visibility/render_colonly_orbit.py` — the **3D consistency** check
+
+**Job:** the opposite test. **Frame is pinned** (default 75) and the camera orbits
+360°. Shape and texture are therefore constant, so *anything* that changes is
+viewpoint alone.
+
+**Produces:** `ORBIT_angle_*.mp4`.
+
+| flag | effect |
+|---|---|
+| `--sweep angle` | frame pinned, camera orbits — the sticker test |
+| `--sweep both` | frame advances *and* camera orbits |
+| `--no-gt` | drop the GT panel. The GT is a single-camera 2D video, so it cannot orbit; in a turntable it is a static distraction |
+| `--alignment` / `--vismask` | reproduce the rung13 / rung11 forward pass exactly |
+
+`GATE-cam` asserts that `orbit_extrinsics(0, 0, 2)` reproduces the confirmed
+front-view `EXTRINSICS` before rendering anything — otherwise a "the texture is a
+sticker" verdict could be an artifact of a wrong camera rather than the adapter.
+
+**This is the video that exposes the remaining coverage problem.**
+
+---
+
+### `visibility/jobs/*.sbatch` — how each is launched
+
+| file | launches |
+|---|---|
+| `align.sbatch` | the alignment solve |
+| `comp_test.sbatch` | the falsification test |
+| `rung13.sbatch` | training (echoes the alignment it used at job start) |
+| `rung13_temporal.sbatch` | the 150-frame dynamic video |
+| `colonly_orbit.sbatch` | the turntables |
+| `colonly_cmp.sbatch` | the parent's 150-frame video |
+
+They all share the same shape, and the details are not arbitrary:
+
+```bash
+#SBATCH --partition=threedle-contrib,threedle-own,general   # try ours, fall back
+#SBATCH --time=04:00:00        # 4 h is the HARD cap on every partition here
+#SBATCH --requeue              # preempted -> restart, script resumes from ckpt
+#SBATCH --open-mode=append     # logs append across restarts instead of truncating
+set -eo pipefail               # fail loudly, including inside a pipe
+```
+
+**Never use `sbatch --wrap`.** It executes under `/bin/sh`, which is `dash` on this
+cluster, and `dash` has no `set -o pipefail`. Two jobs died in 0 seconds before we
+worked that out.
+
+---
+
+### Upstream TRELLIS files — read these when you need ground truth
+
+| file | what it settles |
+|---|---|
+| `trellis/representations/mesh/cube2mesh.py` | the `out_layer` channel layout (`LAYOUTS`), and how `reg_loss` is assembled |
+| `trellis/representations/mesh/utils_cube.py` | how 8 per-cube values become one grid vertex (`cubes_to_verts` averages them), and `con_loss` |
+| `trellis/models/structured_latent_vae/decoder_mesh.py` | decoder forward: 12 blocks → 2 upsamplers → `out_layer` → FlexiCubes |
+| `trellis/modules/sparse/transformer/modulated.py` | the SLaT flow block — `self_attn` **and** `cross_attn` live here. This is where the next experiment goes |
+| `trellis/renderers/mesh_renderer.py` | proves colour is per-vertex and there are no UVs. Also shows `dr.antialias`, which is why silhouettes are differentiable |
+
+---
+
+## 12. Glossary
+
+Terms used above, in the order you will meet them.
+
+| term | meaning |
+|---|---|
+| **voxel** | a 3D pixel — a little cube of space. TRELLIS represents the object as a sparse set of occupied voxels (7,301 of them for our teapot) |
+| **SLaT** | *Structured Latent*. TRELLIS's representation: 8 numbers attached to each occupied voxel. Everything about the object's appearance and shape is encoded in these |
+| **flow model** | a generator that starts from random noise and integrates an ODE for a fixed number of steps until the noise becomes a sample. TRELLIS uses two: one for structure (12 steps), one for SLaT (25 steps) |
+| **cross-attention** | a layer where one set of things (voxels) looks up information in another set (image tokens). This is how the image influences the 3D output |
+| **self-attention** | voxels looking at each other. This is what makes the output 3D-*coherent* rather than a pile of independent points |
+| **DINOv2** | a pretrained vision model. We use it only to turn the input image into 1,374 feature tokens |
+| **FlexiCubes** | the algorithm that converts per-voxel numbers into an actual triangle mesh. It draws a surface wherever the `sdf` changes sign |
+| **sdf** | *signed distance field*. One number per grid corner: negative inside the object, positive outside. The surface lives where it crosses zero |
+| **mesh / vertices / faces** | the 3D model: a list of points, and a list of triangles joining them |
+| **silhouette** | the object's outline in a rendered image — a binary mask of "object here / background here" |
+| **IoU** | *Intersection over Union*. Overlap two shapes, divide the area where both agree by the area either covers. 1.0 = identical, 0 = no overlap |
+| **NCC** | *normalised cross-correlation*. Slide one image over another and find the offset where they match best. We use it to detect whether the texture is displaced |
+| **LoRA** | *Low-Rank Adaptation*. Instead of fine-tuning a big weight matrix, add a small correction `B @ A @ x` where `A` and `B` are skinny. Few parameters, and with `B` zero-init the model starts unchanged |
+| **rank** | the width of that bottleneck. We use rank 4 — the adapter can only express 4 directions of change per layer |
+| **forward hook** | a PyTorch mechanism that intercepts a layer's output at runtime. It lets us inject the LoRA **without modifying TRELLIS's source or weights** |
+| **nvdiffrast** | NVIDIA's differentiable renderer. "Differentiable" means you can compute how the image would change if you moved a vertex — which is what makes the alignment solve possible |
+| **antialiasing** | smoothing jagged edges. Incidentally it is what makes the *silhouette* differentiable, since the boundary becomes a soft ramp instead of a hard step |
+| **PSNR** | image quality in dB. Higher is better. Sensitive to overall brightness, not to structure |
+| **SSIM** | structural similarity, 0–1. Higher is better. Closer to how a person judges "same picture" |
+| **LPIPS** | perceptual distance computed with a neural network. **Lower** is better. Usually the most trustworthy of the three |
+| **held-out** | frames excluded from training and used only for evaluation, so you can tell fitting from memorising |
+| **gate** | an assertion that stops the run before training if a precondition fails. Cheaper to fail in 30 seconds than after 4 hours |
+| **sbatch / SLURM** | the cluster's job scheduler. You submit a script, it queues, it runs on a GPU node when one frees up |
+| **preemption** | the cluster taking your GPU back for a higher-priority job. `--requeue` plus per-epoch checkpoints means you resume instead of starting over |
+
+---
+
+## 13. Where this is going next
 
 The open problem is **coverage**: one camera, 16.8% of the surface supervised, and no
 mechanism to reach the rest.
