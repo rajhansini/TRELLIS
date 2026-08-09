@@ -1,0 +1,33 @@
+diff --git a/flexicubes.py b/flexicubes.py
+index 93e47b6..e7b17dc 100644
+--- a/flexicubes.py
++++ b/flexicubes.py
+@@ -138,7 +138,7 @@ class FlexiCubes:
+         else:
+             gamma_f = torch.ones((n_cubes), dtype=torch.float, device=self.device)
+ 
+-        return beta[surf_cubes], alpha[surf_cubes], gamma_f[surf_cubes]
++        return beta[surf_cubes].float(), alpha[surf_cubes].float(), gamma_f[surf_cubes].float()
+ 
+     @torch.no_grad()
+     def _get_case_id(self, occ_fx8, surf_cubes, res):
+@@ -318,8 +318,8 @@ class FlexiCubes:
+ 
+         beta_group = torch.gather(input=beta.reshape(-1), dim=0,
+                                     index=edge_group_to_cube * 12 + edge_group).reshape(-1, 1)
+-        beta_sum = beta_sum.index_add_(0, index=edge_group_to_vd, source=beta_group)
+-        vd = vd.index_add_(0, index=edge_group_to_vd, source=ue_group * beta_group) / beta_sum
++        beta_sum = beta_sum.index_add(0, edge_group_to_vd, beta_group)
++        vd = vd.index_add(0, edge_group_to_vd, ue_group * beta_group) / beta_sum
+         
+         '''
+         interpolate colors use the same method as dual vertices
+@@ -328,7 +328,7 @@ class FlexiCubes:
+             vd_color = torch.zeros((total_num_vd, C), device=self.device)
+             c_group = torch.index_select(input=surf_edges_c, index=idx_group.reshape(-1), dim=0).reshape(-1, 2, C)
+             uc_group = self._linear_interp(s_group * alpha_group, c_group)
+-            vd_color = vd_color.index_add_(0, index=edge_group_to_vd, source=uc_group * beta_group) / beta_sum
++            vd_color = vd_color.index_add(0, edge_group_to_vd, uc_group * beta_group) / beta_sum
+         else:
+             vd_color = None
+         
