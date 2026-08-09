@@ -1,0 +1,14 @@
+{
+    "sampling_rate":500,
+    "scale":1.0,
+    "light_type":"SUN",
+    "use_denoise":true,
+    "pc":false,
+    "texture":true,
+    "rotation_x":0,
+    "rotation_y":0,
+    "rotation_z":-1.3,
+    "location_x":0,
+    "location_y":0,
+    "location_z":0
+}

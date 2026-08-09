@@ -1,0 +1,67 @@
+{
+  "alignment": {
+    "scale": 0.890291154384613,
+    "rotvec": [
+      -0.10910143703222275,
+      0.0014725943328812718,
+      -0.053017616271972656
+    ],
+    "translation": [
+      0.041249532252550125,
+      -0.0471879243850708,
+      0.001281877513974905
+    ]
+  },
+  "ckpt_epoch": 27,
+  "rows": [
+    {
+      "frame": 75,
+      "unaligned": {
+        "dy": 0,
+        "dx": 0,
+        "ncc": 0.7820514499894139,
+        "ncc_zero": 0.7820514499894139
+      },
+      "aligned": {
+        "dy": -10,
+        "dx": 19,
+        "ncc": 0.5646447210585034,
+        "ncc_zero": 0.5081895155043159
+      }
+    },
+    {
+      "frame": 120,
+      "unaligned": {
+        "dy": 0,
+        "dx": 0,
+        "ncc": 0.7984253292002783,
+        "ncc_zero": 0.7984253292002783
+      },
+      "aligned": {
+        "dy": -9,
+        "dx": 5,
+        "ncc": 0.554123461152367,
+        "ncc_zero": 0.4755081769514833
+      }
+    },
+    {
+      "frame": 150,
+      "unaligned": {
+        "dy": 0,
+        "dx": 0,
+        "ncc": 0.8312685417534175,
+        "ncc_zero": 0.8312685417534175
+      },
+      "aligned": {
+        "dy": -9,
+        "dx": 8,
+        "ncc": 0.6245679559077609,
+        "ncc_zero": 0.566112603411403
+      }
+    }
+  ],
+  "mean_dx_unaligned": 0.0,
+  "mean_dx_aligned": 10.666666666666666,
+  "moved_px": 10.666666666666666,
+  "verdict": "CONFIRMED \u2014 aligning the mesh exposes a baked-in texture shift. The adapter was compensating. Retraining on the aligned mesh is justified."
+}

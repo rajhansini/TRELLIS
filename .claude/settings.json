@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3 -c ' *)",
+      "Bash(/net/projects/ranalab/rajhansini/conda_envs/trellis/bin/python -c ' *)",
+      "Bash(cat > *)",
+      "Bash(mkdir -p /net/projects/ranalab/rajhansini/TRELLIS/experiments/results/phase8_gl)",
+      "Bash(sbatch /tmp/phase8_gl_test.sh)",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\('in_channels:', d.get\\('in_channels', 'NOT FOUND'\\)\\)\")",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\('in_channels:', d.get\\('in_channels', 'NOT FOUND'\\)\\); print\\(json.dumps\\({k:v for k,v in d.items\\(\\) if 'channel' in k.lower\\(\\)}, indent=2\\)\\)\")"
+    ],
+    "additionalDirectories": [
+      "/tmp"
+    ]
+  }
+}

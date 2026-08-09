@@ -1,0 +1,10 @@
+{
+  "algo": "implicit_gemm",
+  "grad_weights": true,
+  "resolution": 512,
+  "ok": false,
+  "error": null,
+  "peak_gib": 17.07,
+  "grad_sum": 0.0,
+  "seconds": 42.03
+}

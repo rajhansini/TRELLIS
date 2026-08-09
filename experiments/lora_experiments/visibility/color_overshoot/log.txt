@@ -1,0 +1,137 @@
+[SPARSE] Backend: spconv, Attention: xformers
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/requests/__init__.py:92: RequestsDependencyWarning: Unable to find acceptable character detection dependency (chardet or charset_normalizer).
+  warnings.warn(
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/xformers/ops/fmha/flash.py:211: FutureWarning: `torch.library.impl_abstract` was renamed to `torch.library.register_fake`. Please use that instead; we will remove `torch.library.impl_abstract` in a future version of PyTorch.
+  @torch.library.impl_abstract("xformers_flash::flash_fwd")
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/xformers/ops/fmha/flash.py:344: FutureWarning: `torch.library.impl_abstract` was renamed to `torch.library.register_fake`. Please use that instead; we will remove `torch.library.impl_abstract` in a future version of PyTorch.
+  @torch.library.impl_abstract("xformers_flash::flash_bwd")
+[ATTENTION] Using backend: xformers
+================================================================================================
+vertex-colour overshoot: are the white patches CLIPPING, before any render?
+  frames [1, 30, 60, 75, 90, 120, 150]   run rung15v1_uniform_all_qkvo_r4_s6_2674ec70
+================================================================================================
+[SPARSE][CONV] spconv algo: native
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/spconv/pytorch/functional.py:51: FutureWarning: `torch.cuda.amp.custom_fwd(args...)` is deprecated. Please use `torch.amp.custom_fwd(args..., device_type='cuda')` instead.
+  _TORCH_CUSTOM_FWD = amp.custom_fwd(cast_inputs=torch.float16)
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/spconv/pytorch/functional.py:101: FutureWarning: `torch.cuda.amp.custom_bwd(args...)` is deprecated. Please use `torch.amp.custom_bwd(args..., device_type='cuda')` instead.
+  def backward(ctx, grad_output):
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/spconv/pytorch/functional.py:167: FutureWarning: `torch.cuda.amp.custom_bwd(args...)` is deprecated. Please use `torch.amp.custom_bwd(args..., device_type='cuda')` instead.
+  def backward(ctx, grad_output):
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/spconv/pytorch/functional.py:247: FutureWarning: `torch.cuda.amp.custom_bwd(args...)` is deprecated. Please use `torch.amp.custom_bwd(args..., device_type='cuda')` instead.
+  def backward(ctx, grad_output):
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/spconv/pytorch/functional.py:336: FutureWarning: `torch.cuda.amp.custom_bwd(args...)` is deprecated. Please use `torch.amp.custom_bwd(args..., device_type='cuda')` instead.
+  def backward(ctx, grad_output):
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/spconv/pytorch/functional.py:373: FutureWarning: `torch.cuda.amp.custom_bwd(args...)` is deprecated. Please use `torch.amp.custom_bwd(args..., device_type='cuda')` instead.
+  def backward(ctx, grad_output):
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/spconv/pytorch/functional.py:393: FutureWarning: `torch.cuda.amp.custom_bwd(args...)` is deprecated. Please use `torch.amp.custom_bwd(args..., device_type='cuda')` instead.
+  def backward(ctx, grad_output):
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/spconv/pytorch/functional.py:416: FutureWarning: `torch.cuda.amp.custom_bwd(args...)` is deprecated. Please use `torch.amp.custom_bwd(args..., device_type='cuda')` instead.
+  def backward(ctx, grad_output):
+Using cache found in /home/rajhansini/.cache/torch/hub/facebookresearch_dinov2_main
+/home/rajhansini/.cache/torch/hub/facebookresearch_dinov2_main/dinov2/layers/swiglu_ffn.py:43: UserWarning: xFormers is available (SwiGLU)
+  warnings.warn("xFormers is available (SwiGLU)")
+/home/rajhansini/.cache/torch/hub/facebookresearch_dinov2_main/dinov2/layers/attention.py:27: UserWarning: xFormers is available (Attention)
+  warnings.warn("xFormers is available (Attention)")
+/home/rajhansini/.cache/torch/hub/facebookresearch_dinov2_main/dinov2/layers/block.py:33: UserWarning: xFormers is available (Block)
+  warnings.warn("xFormers is available (Block)")
+Sampling:   0%|          | 0/25 [00:00<?, ?it/s]Sampling:   4%|4         | 1/25 [00:00<00:02,  9.90it/s]Sampling:  12%|#2        | 3/25 [00:00<00:01, 11.96it/s]Sampling:  20%|##        | 5/25 [00:00<00:01, 12.33it/s]Sampling:  28%|##8       | 7/25 [00:00<00:01, 12.48it/s]Sampling:  36%|###6      | 9/25 [00:00<00:01, 12.57it/s]Sampling:  44%|####4     | 11/25 [00:00<00:01, 12.63it/s]Sampling:  52%|#####2    | 13/25 [00:01<00:00, 12.70it/s]Sampling:  60%|######    | 15/25 [00:01<00:00, 12.74it/s]Sampling:  68%|######8   | 17/25 [00:01<00:00, 12.75it/s]Sampling:  76%|#######6  | 19/25 [00:01<00:00, 12.76it/s]Sampling:  88%|########8 | 22/25 [00:01<00:00, 15.92it/s]Sampling: 100%|##########| 25/25 [00:01<00:00, 18.38it/s]Sampling: 100%|##########| 25/25 [00:01<00:00, 14.30it/s]
+
+[LORA] epoch 29  psnr 21.953  max||B|| 1.8493
+
+frame   model     verts     >1.0    >0.99     max   p99.9     p99    mean      <0      min
+------------------------------------------------------------------------------------------
+    1  frozen   217,154    0.00%    0.00%   0.438   0.295   0.260   0.119   0.00%    0.008
+    1  rung15   219,868    0.00%    0.00%   0.986   0.975   0.937   0.314   0.00%    0.003
+   30  frozen   215,258    0.00%    0.00%   0.848   0.789   0.628   0.137   0.00%    0.002
+   30  rung15   219,432    0.00%    0.01%   0.992   0.979   0.952   0.315   0.00%    0.004
+   60  frozen   215,536    0.00%    0.00%   0.921   0.851   0.794   0.157   0.00%    0.002
+   60  rung15   218,530    0.00%    0.01%   0.994   0.982   0.962   0.297   0.00%    0.000
+   75  frozen   215,490    0.00%    0.00%   0.919   0.872   0.811   0.167   0.00%    0.002
+   75  rung15   218,234    0.00%    0.02%   0.993   0.983   0.966   0.293   0.00%    0.000
+   90  frozen   215,390    0.00%    0.00%   0.925   0.883   0.824   0.189   0.00%    0.002
+   90  rung15   217,978    0.00%    0.02%   0.993   0.983   0.966   0.291   0.00%    0.000
+  120  frozen   215,070    0.00%    0.00%   0.945   0.913   0.850   0.197   0.00%    0.001
+  120  rung15   218,004    0.00%    0.01%   0.992   0.981   0.965   0.302   0.00%    0.000
+  150  frozen   214,890    0.00%    0.00%   0.943   0.908   0.855   0.233   0.00%    0.001
+  150  rung15   217,556    0.00%    0.01%   0.994   0.981   0.967   0.329   0.00%    0.001
+
+================================================================================================
+READING IT
+  >1.0    fraction of VERTICES with any albedo channel above 1.0.
+          These clip to white on render. The renderer cannot show how far above.
+  <0      fraction of channels below 0, which clip to black.
+
+  wrote /net/projects/ranalab/rajhansini/TRELLIS/experiments/lora_experiments/visibility/color_overshoot/overshoot.json
+================================================================================================
+[SPARSE] Backend: spconv, Attention: xformers
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/requests/__init__.py:92: RequestsDependencyWarning: Unable to find acceptable character detection dependency (chardet or charset_normalizer).
+  warnings.warn(
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/xformers/ops/fmha/flash.py:211: FutureWarning: `torch.library.impl_abstract` was renamed to `torch.library.register_fake`. Please use that instead; we will remove `torch.library.impl_abstract` in a future version of PyTorch.
+  @torch.library.impl_abstract("xformers_flash::flash_fwd")
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/xformers/ops/fmha/flash.py:344: FutureWarning: `torch.library.impl_abstract` was renamed to `torch.library.register_fake`. Please use that instead; we will remove `torch.library.impl_abstract` in a future version of PyTorch.
+  @torch.library.impl_abstract("xformers_flash::flash_bwd")
+[ATTENTION] Using backend: xformers
+============================================================================================
+per-vertex albedo, VISIBLE vs OCCLUDED from the training camera
+  frames [1, 30, 60, 75, 90, 120, 150]   run rung15v1_uniform_all_qkvo_r4_s6_2674ec70
+============================================================================================
+[SPARSE][CONV] spconv algo: native
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/spconv/pytorch/functional.py:51: FutureWarning: `torch.cuda.amp.custom_fwd(args...)` is deprecated. Please use `torch.amp.custom_fwd(args..., device_type='cuda')` instead.
+  _TORCH_CUSTOM_FWD = amp.custom_fwd(cast_inputs=torch.float16)
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/spconv/pytorch/functional.py:101: FutureWarning: `torch.cuda.amp.custom_bwd(args...)` is deprecated. Please use `torch.amp.custom_bwd(args..., device_type='cuda')` instead.
+  def backward(ctx, grad_output):
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/spconv/pytorch/functional.py:167: FutureWarning: `torch.cuda.amp.custom_bwd(args...)` is deprecated. Please use `torch.amp.custom_bwd(args..., device_type='cuda')` instead.
+  def backward(ctx, grad_output):
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/spconv/pytorch/functional.py:247: FutureWarning: `torch.cuda.amp.custom_bwd(args...)` is deprecated. Please use `torch.amp.custom_bwd(args..., device_type='cuda')` instead.
+  def backward(ctx, grad_output):
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/spconv/pytorch/functional.py:336: FutureWarning: `torch.cuda.amp.custom_bwd(args...)` is deprecated. Please use `torch.amp.custom_bwd(args..., device_type='cuda')` instead.
+  def backward(ctx, grad_output):
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/spconv/pytorch/functional.py:373: FutureWarning: `torch.cuda.amp.custom_bwd(args...)` is deprecated. Please use `torch.amp.custom_bwd(args..., device_type='cuda')` instead.
+  def backward(ctx, grad_output):
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/spconv/pytorch/functional.py:393: FutureWarning: `torch.cuda.amp.custom_bwd(args...)` is deprecated. Please use `torch.amp.custom_bwd(args..., device_type='cuda')` instead.
+  def backward(ctx, grad_output):
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/spconv/pytorch/functional.py:416: FutureWarning: `torch.cuda.amp.custom_bwd(args...)` is deprecated. Please use `torch.amp.custom_bwd(args..., device_type='cuda')` instead.
+  def backward(ctx, grad_output):
+Using cache found in /home/rajhansini/.cache/torch/hub/facebookresearch_dinov2_main
+/home/rajhansini/.cache/torch/hub/facebookresearch_dinov2_main/dinov2/layers/swiglu_ffn.py:43: UserWarning: xFormers is available (SwiGLU)
+  warnings.warn("xFormers is available (SwiGLU)")
+/home/rajhansini/.cache/torch/hub/facebookresearch_dinov2_main/dinov2/layers/attention.py:27: UserWarning: xFormers is available (Attention)
+  warnings.warn("xFormers is available (Attention)")
+/home/rajhansini/.cache/torch/hub/facebookresearch_dinov2_main/dinov2/layers/block.py:33: UserWarning: xFormers is available (Block)
+  warnings.warn("xFormers is available (Block)")
+Sampling:   0%|          | 0/25 [00:00<?, ?it/s]Sampling:   8%|8         | 2/25 [00:00<00:02, 11.30it/s]Sampling:  16%|#6        | 4/25 [00:00<00:01, 12.16it/s]Sampling:  24%|##4       | 6/25 [00:00<00:01, 12.43it/s]Sampling:  32%|###2      | 8/25 [00:00<00:01, 12.57it/s]Sampling:  40%|####      | 10/25 [00:00<00:01, 12.63it/s]Sampling:  48%|####8     | 12/25 [00:00<00:01, 12.65it/s]Sampling:  56%|#####6    | 14/25 [00:01<00:00, 12.63it/s]Sampling:  64%|######4   | 16/25 [00:01<00:00, 12.67it/s]Sampling:  72%|#######2  | 18/25 [00:01<00:00, 12.70it/s]Sampling:  80%|########  | 20/25 [00:01<00:00, 13.80it/s]Sampling:  92%|#########2| 23/25 [00:01<00:00, 16.89it/s]Sampling: 100%|##########| 25/25 [00:01<00:00, 14.32it/s]
+[S8] MeshRenderer: res=518  near=0.5  far=3.0  ssaa=1
+
+[LORA] epoch 29  psnr 21.953
+
+frame   model     verts    vis% |  VISIBLE mean  OCCLUDED mean   occ-vis   ratio |  vis p99  occ p99
+----------------------------------------------------------------------------------------------------
+
+[GATE-proj] deciding row convention from the depth buffer
+  flip_y=True   on-surface 0.0041
+  flip_y=False  on-surface 0.0777
+[GATE-proj] PASSED -- flip_y=False
+    1  frozen   217,150    7.5% |        0.1357         0.1180   -0.0177   0.870 |   0.2258   0.2608
+    1  rung15   219,854    7.7% |        0.3142         0.3143   +0.0002   1.001 |   0.9147   0.9382
+   30  frozen   215,266    7.6% |        0.1499         0.1358   -0.0140   0.906 |   0.3294   0.3464
+   30  rung15   219,434    7.6% |        0.3184         0.3147   -0.0037   0.988 |   0.9364   0.9455
+   60  frozen   215,548    7.6% |        0.1544         0.1568   +0.0023   1.015 |   0.4575   0.4570
+   60  rung15   218,548    7.7% |        0.2762         0.2982   +0.0221   1.080 |   0.8096   0.9287
+   75  frozen   215,466    7.6% |        0.1592         0.1675   +0.0083   1.052 |   0.4774   0.4770
+   75  rung15   218,222    7.7% |        0.2570         0.2956   +0.0386   1.150 |   0.7038   0.9237
+   90  frozen   215,398    7.6% |        0.1788         0.1901   +0.0113   1.063 |   0.4787   0.4855
+   90  rung15   218,002    7.7% |        0.2449         0.2951   +0.0502   1.205 |   0.6856   0.9169
+  120  frozen   215,066    7.5% |        0.1912         0.1970   +0.0058   1.030 |   0.5188   0.5207
+  120  rung15   218,020    7.7% |        0.2553         0.3057   +0.0503   1.197 |   0.7025   0.8999
+  150  frozen   214,880    7.5% |        0.2305         0.2337   +0.0032   1.014 |   0.5064   0.5231
+  150  rung15   217,572    7.7% |        0.3150         0.3301   +0.0151   1.048 |   0.6874   0.9024
+
+============================================================================================
+VERDICT
+  frozen  occluded - visible = -0.0001   <- the gap geometry alone produces
+  rung15  occluded - visible = +0.0247
+  excess attributable to the LoRA = +0.0248
+
+  (a) NON-UNIFORM: rung15 brightened the surface the camera never saw,
+      beyond what frozen does. The correction did not propagate.
+============================================================================================

@@ -1,0 +1,12 @@
+lambda_vec  = [0.142857, 0.142857, 0.142857, 0.142857, 0.142857, 0.142857, 0.142857]
+sum         = 1.000000
+lambda[k=3] = 0.142857  ← center frame weight
+
+─ per-frame weights (after boundary accumulation) ─
+  frame   72: 0.142857
+  frame   73: 0.142857
+  frame   74: 0.142857
+  frame   75: 0.142857 ← centre
+  frame   76: 0.142857
+  frame   77: 0.142857
+  frame   78: 0.142857

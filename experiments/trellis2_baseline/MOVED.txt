@@ -1,0 +1,4 @@
+TRELLIS.2 work moved to  /net/projects/ranalab/rajhansini/TRELLIS.2/experiments/dynamesh
+This directory only holds the output of job 2155990, which was already running against
+these paths when the move happened. Once it finishes, runs/ and out/ move too and this
+directory goes away.

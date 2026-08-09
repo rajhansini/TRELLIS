@@ -1,0 +1,6 @@
+frame_num    = 75
+t_val        = 0.496644
+frame_idx    = 75
+k            = 3
+window       = [72, 73, 74, 75, 76, 77, 78]
+duplicates   = 0  (boundary clamping)

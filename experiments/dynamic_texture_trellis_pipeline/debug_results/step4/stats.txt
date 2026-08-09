@@ -1,0 +1,13 @@
+K_hat (output of MCFM) shape=(1374, 1024)  min=-25.53831  max=15.85413  mean=-0.00000  std=0.99662  nan=0  inf=0
+centre frame tokens (raw) shape=(1374, 1024)  min=-25.54312  max=15.84716  mean=-0.00000  std=1.00000  nan=0  inf=0
+abs(K_hat - centre) shape=(1374, 1024)  min=0.00000  max=1.41840  mean=0.03880  std=0.04183  nan=0  inf=0
+
+cosine_sim(K_hat, centre) per token:
+  mean = 0.99837
+  min  = 0.98479
+  max  = 1.00000
+  std  = 0.00188
+
+How much MCFM changed the tokens relative to centre-frame raw:
+  diff mean/dim = 0.03880
+  If cos_sim ≈ 1.0 everywhere → MCFM barely changed the tokens (expected for uniform λ)

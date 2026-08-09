@@ -1,0 +1,16 @@
+tokens[72] shape=(1374, 1024)  min=-25.51862  max=15.89446  mean=-0.00000  std=1.00000  nan=0  inf=0
+tokens[73] shape=(1374, 1024)  min=-25.53205  max=15.86122  mean=0.00000  std=1.00000  nan=0  inf=0
+tokens[74] shape=(1374, 1024)  min=-25.53656  max=15.85662  mean=0.00000  std=1.00000  nan=0  inf=0
+tokens[75] shape=(1374, 1024)  min=-25.54312  max=15.84716  mean=-0.00000  std=1.00000  nan=0  inf=0
+tokens[76] shape=(1374, 1024)  min=-25.54315  max=15.84688  mean=0.00000  std=1.00000  nan=0  inf=0
+tokens[77] shape=(1374, 1024)  min=-25.54227  max=15.84633  mean=-0.00000  std=1.00000  nan=0  inf=0
+tokens[78] shape=(1374, 1024)  min=-25.55242  max=15.82623  mean=0.00000  std=1.00000  nan=0  inf=0
+
+─ cosine similarity to centre (mean over 1374 tokens) ─
+  frame   72: 0.954224
+  frame   73: 0.960166
+  frame   74: 0.985654
+  frame   75: 1.000000 ← centre
+  frame   76: 0.960156
+  frame   77: 0.950229
+  frame   78: 0.945474

@@ -1,0 +1,19 @@
+{
+  "run_dir": "/net/projects/ranalab/rajhansini/TRELLIS/experiments/lora_experiments/runs/rung5_colonly_outlayer_r4_s6_c85c888f",
+  "ckpt": "/net/projects/ranalab/rajhansini/TRELLIS/experiments/lora_experiments/runs/rung5_colonly_outlayer_r4_s6_c85c888f/lora_ckpts/lora_best.pt",
+  "sweep": "both",
+  "frame": 75,
+  "n_angles": 60,
+  "n_frames": 150,
+  "elevation": 15.0,
+  "radius": 2.0,
+  "mask": {
+    "mode": "none",
+    "agg": null,
+    "eps": 0.0001,
+    "soft_q": 0.5,
+    "gamma": 1.0
+  },
+  "delta_channels": "all",
+  "mask_stats": "none"
+}

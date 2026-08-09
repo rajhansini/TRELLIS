@@ -1,0 +1,73 @@
+[SPARSE] Backend: spconv, Attention: xformers
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/requests/__init__.py:92: RequestsDependencyWarning: Unable to find acceptable character detection dependency (chardet or charset_normalizer).
+  warnings.warn(
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/xformers/ops/fmha/flash.py:211: FutureWarning: `torch.library.impl_abstract` was renamed to `torch.library.register_fake`. Please use that instead; we will remove `torch.library.impl_abstract` in a future version of PyTorch.
+  @torch.library.impl_abstract("xformers_flash::flash_fwd")
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/xformers/ops/fmha/flash.py:344: FutureWarning: `torch.library.impl_abstract` was renamed to `torch.library.register_fake`. Please use that instead; we will remove `torch.library.impl_abstract` in a future version of PyTorch.
+  @torch.library.impl_abstract("xformers_flash::flash_bwd")
+[ATTENTION] Using backend: xformers
+================================================================================================
+CROSSING WITNESS   frame 1   tau 4.0
+================================================================================================
+[SPARSE][CONV] spconv algo: native
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/spconv/pytorch/functional.py:51: FutureWarning: `torch.cuda.amp.custom_fwd(args...)` is deprecated. Please use `torch.amp.custom_fwd(args..., device_type='cuda')` instead.
+  _TORCH_CUSTOM_FWD = amp.custom_fwd(cast_inputs=torch.float16)
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/spconv/pytorch/functional.py:101: FutureWarning: `torch.cuda.amp.custom_bwd(args...)` is deprecated. Please use `torch.amp.custom_bwd(args..., device_type='cuda')` instead.
+  def backward(ctx, grad_output):
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/spconv/pytorch/functional.py:167: FutureWarning: `torch.cuda.amp.custom_bwd(args...)` is deprecated. Please use `torch.amp.custom_bwd(args..., device_type='cuda')` instead.
+  def backward(ctx, grad_output):
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/spconv/pytorch/functional.py:247: FutureWarning: `torch.cuda.amp.custom_bwd(args...)` is deprecated. Please use `torch.amp.custom_bwd(args..., device_type='cuda')` instead.
+  def backward(ctx, grad_output):
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/spconv/pytorch/functional.py:336: FutureWarning: `torch.cuda.amp.custom_bwd(args...)` is deprecated. Please use `torch.amp.custom_bwd(args..., device_type='cuda')` instead.
+  def backward(ctx, grad_output):
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/spconv/pytorch/functional.py:373: FutureWarning: `torch.cuda.amp.custom_bwd(args...)` is deprecated. Please use `torch.amp.custom_bwd(args..., device_type='cuda')` instead.
+  def backward(ctx, grad_output):
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/spconv/pytorch/functional.py:393: FutureWarning: `torch.cuda.amp.custom_bwd(args...)` is deprecated. Please use `torch.amp.custom_bwd(args..., device_type='cuda')` instead.
+  def backward(ctx, grad_output):
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/spconv/pytorch/functional.py:416: FutureWarning: `torch.cuda.amp.custom_bwd(args...)` is deprecated. Please use `torch.amp.custom_bwd(args..., device_type='cuda')` instead.
+  def backward(ctx, grad_output):
+Using cache found in /home/rajhansini/.cache/torch/hub/facebookresearch_dinov2_main
+/home/rajhansini/.cache/torch/hub/facebookresearch_dinov2_main/dinov2/layers/swiglu_ffn.py:43: UserWarning: xFormers is available (SwiGLU)
+  warnings.warn("xFormers is available (SwiGLU)")
+/home/rajhansini/.cache/torch/hub/facebookresearch_dinov2_main/dinov2/layers/attention.py:27: UserWarning: xFormers is available (Attention)
+  warnings.warn("xFormers is available (Attention)")
+/home/rajhansini/.cache/torch/hub/facebookresearch_dinov2_main/dinov2/layers/block.py:33: UserWarning: xFormers is available (Block)
+  warnings.warn("xFormers is available (Block)")
+Sampling:   0%|          | 0/25 [00:00<?, ?it/s]Sampling:   4%|4         | 1/25 [00:00<00:02,  9.79it/s]Sampling:  12%|#2        | 3/25 [00:00<00:01, 11.90it/s]Sampling:  20%|##        | 5/25 [00:00<00:01, 12.40it/s]Sampling:  28%|##8       | 7/25 [00:00<00:01, 12.59it/s]Sampling:  36%|###6      | 9/25 [00:00<00:01, 12.66it/s]Sampling:  44%|####4     | 11/25 [00:00<00:01, 12.74it/s]Sampling:  52%|#####2    | 13/25 [00:01<00:00, 12.81it/s]Sampling:  60%|######    | 15/25 [00:01<00:00, 12.83it/s]Sampling:  68%|######8   | 17/25 [00:01<00:00, 12.84it/s]Sampling:  76%|#######6  | 19/25 [00:01<00:00, 12.85it/s]Sampling:  88%|########8 | 22/25 [00:01<00:00, 16.04it/s]Sampling: 100%|##########| 25/25 [00:01<00:00, 18.53it/s]Sampling: 100%|##########| 25/25 [00:01<00:00, 14.40it/s]
+[LORA] rung16e1_rembg_uniform_all_qkvo_r4_s6_0f8620e0  epoch 30  psnr 23.227
+
+[frozen  ] 709,798 surface crossings
+[adapted ] 723,604 surface crossings
+
+================================================================================================
+CORNER-NESS  min(t, 1-t).  0.5 = clean mid-edge cut, 0 = grazes a corner
+    model          n     mean     p01     p10     p50
+   frozen    709,798   0.2511  0.0052  0.0507  0.2512
+  adapted    723,604   0.2535  0.0053  0.0536  0.2607
+
+------------------------------------------------------------------------------------------------
+THE TEST: do the SATURATED crossings have LOW corner-ness?
+
+  FROZEN: 0 of 709,798 crossings above +4.0  (0.0000%)
+
+  ADAPTED: 0 of 723,604 crossings above +4.0  (0.0000%)
+
+------------------------------------------------------------------------------------------------
+SATURATION RATE vs corner-ness  (adapted)
+   corner-ness bin           n   % above tau  mean logit
+       [0.00,0.02)      26,889       0.0000%     -0.6202
+       [0.02,0.05)      40,593       0.0000%     -0.6070
+       [0.05,0.10)      67,914       0.0000%     -0.6077
+       [0.10,0.20)     139,154       0.0000%     -0.6105
+       [0.20,0.30)     148,651       0.0000%     -0.6017
+       [0.30,0.40)     162,615       0.0000%     -0.5684
+       [0.40,0.50)     137,788       0.0000%     -0.6534
+
+================================================================================================
+READING IT
+  If "% above tau" RISES as corner-ness falls, degenerate crossings are
+  where the white is made, and the mechanism is confirmed.
+  If it is FLAT across the bins, corner-ness has nothing to do with it.
+
+  wrote /net/projects/ranalab/rajhansini/TRELLIS/experiments/lora_experiments/visibility/crossing
+================================================================================================

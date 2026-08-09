@@ -1,0 +1,30 @@
+[
+  {
+    "frame": 1,
+    "theta": 0.0,
+    "n_white": 6565,
+    "frac_white_on_unseen": 0.18415841584158416,
+    "frac_object_white": 0.17802424275293544
+  },
+  {
+    "frame": 1,
+    "theta": 328.0,
+    "n_white": 12053,
+    "frac_white_on_unseen": 0.28706546088110846,
+    "frac_object_white": 0.32819605173587474
+  },
+  {
+    "frame": 75,
+    "theta": 0.0,
+    "n_white": 5855,
+    "frac_white_on_unseen": 0.1721605465414176,
+    "frac_object_white": 0.15905571704110186
+  },
+  {
+    "frame": 75,
+    "theta": 328.0,
+    "n_white": 11297,
+    "frac_white_on_unseen": 0.30521377356820395,
+    "frac_object_white": 0.3076441273385801
+  }
+]

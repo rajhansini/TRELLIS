@@ -1,0 +1,115 @@
+[SPARSE] Backend: spconv, Attention: xformers
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/requests/__init__.py:92: RequestsDependencyWarning: Unable to find acceptable character detection dependency (chardet or charset_normalizer).
+  warnings.warn(
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/xformers/ops/fmha/flash.py:211: FutureWarning: `torch.library.impl_abstract` was renamed to `torch.library.register_fake`. Please use that instead; we will remove `torch.library.impl_abstract` in a future version of PyTorch.
+  @torch.library.impl_abstract("xformers_flash::flash_fwd")
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/xformers/ops/fmha/flash.py:344: FutureWarning: `torch.library.impl_abstract` was renamed to `torch.library.register_fake`. Please use that instead; we will remove `torch.library.impl_abstract` in a future version of PyTorch.
+  @torch.library.impl_abstract("xformers_flash::flash_bwd")
+[ATTENTION] Using backend: xformers
+================================================================================================
+ATTENTION ROUTE:  does  A @ dv  predict the out_layer scatter?
+  frame 75   run rung16e1_rembg_uniform_all_qkvo_r4_s6_0f8620e0
+================================================================================================
+[SPARSE][CONV] spconv algo: native
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/spconv/pytorch/functional.py:51: FutureWarning: `torch.cuda.amp.custom_fwd(args...)` is deprecated. Please use `torch.amp.custom_fwd(args..., device_type='cuda')` instead.
+  _TORCH_CUSTOM_FWD = amp.custom_fwd(cast_inputs=torch.float16)
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/spconv/pytorch/functional.py:101: FutureWarning: `torch.cuda.amp.custom_bwd(args...)` is deprecated. Please use `torch.amp.custom_bwd(args..., device_type='cuda')` instead.
+  def backward(ctx, grad_output):
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/spconv/pytorch/functional.py:167: FutureWarning: `torch.cuda.amp.custom_bwd(args...)` is deprecated. Please use `torch.amp.custom_bwd(args..., device_type='cuda')` instead.
+  def backward(ctx, grad_output):
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/spconv/pytorch/functional.py:247: FutureWarning: `torch.cuda.amp.custom_bwd(args...)` is deprecated. Please use `torch.amp.custom_bwd(args..., device_type='cuda')` instead.
+  def backward(ctx, grad_output):
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/spconv/pytorch/functional.py:336: FutureWarning: `torch.cuda.amp.custom_bwd(args...)` is deprecated. Please use `torch.amp.custom_bwd(args..., device_type='cuda')` instead.
+  def backward(ctx, grad_output):
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/spconv/pytorch/functional.py:373: FutureWarning: `torch.cuda.amp.custom_bwd(args...)` is deprecated. Please use `torch.amp.custom_bwd(args..., device_type='cuda')` instead.
+  def backward(ctx, grad_output):
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/spconv/pytorch/functional.py:393: FutureWarning: `torch.cuda.amp.custom_bwd(args...)` is deprecated. Please use `torch.amp.custom_bwd(args..., device_type='cuda')` instead.
+  def backward(ctx, grad_output):
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/spconv/pytorch/functional.py:416: FutureWarning: `torch.cuda.amp.custom_bwd(args...)` is deprecated. Please use `torch.amp.custom_bwd(args..., device_type='cuda')` instead.
+  def backward(ctx, grad_output):
+Using cache found in /home/rajhansini/.cache/torch/hub/facebookresearch_dinov2_main
+/home/rajhansini/.cache/torch/hub/facebookresearch_dinov2_main/dinov2/layers/swiglu_ffn.py:43: UserWarning: xFormers is available (SwiGLU)
+  warnings.warn("xFormers is available (SwiGLU)")
+/home/rajhansini/.cache/torch/hub/facebookresearch_dinov2_main/dinov2/layers/attention.py:27: UserWarning: xFormers is available (Attention)
+  warnings.warn("xFormers is available (Attention)")
+/home/rajhansini/.cache/torch/hub/facebookresearch_dinov2_main/dinov2/layers/block.py:33: UserWarning: xFormers is available (Block)
+  warnings.warn("xFormers is available (Block)")
+Sampling:   0%|          | 0/25 [00:00<?, ?it/s]Sampling:   4%|4         | 1/25 [00:00<00:04,  5.76it/s]Sampling:   8%|8         | 2/25 [00:00<00:04,  5.45it/s]Sampling:  12%|#2        | 3/25 [00:00<00:04,  5.40it/s]Sampling:  16%|#6        | 4/25 [00:00<00:03,  5.36it/s]Sampling:  20%|##        | 5/25 [00:00<00:03,  5.34it/s]Sampling:  24%|##4       | 6/25 [00:01<00:03,  5.32it/s]Sampling:  28%|##8       | 7/25 [00:01<00:03,  5.31it/s]Sampling:  32%|###2      | 8/25 [00:01<00:03,  5.29it/s]Sampling:  36%|###6      | 9/25 [00:01<00:03,  5.30it/s]Sampling:  40%|####      | 10/25 [00:01<00:02,  5.27it/s]Sampling:  44%|####4     | 11/25 [00:02<00:02,  5.30it/s]Sampling:  48%|####8     | 12/25 [00:02<00:02,  5.29it/s]Sampling:  52%|#####2    | 13/25 [00:02<00:02,  5.27it/s]Sampling:  56%|#####6    | 14/25 [00:02<00:02,  5.29it/s]Sampling:  60%|######    | 15/25 [00:02<00:01,  5.29it/s]Sampling:  64%|######4   | 16/25 [00:03<00:01,  5.29it/s]Sampling:  68%|######8   | 17/25 [00:03<00:01,  5.29it/s]Sampling:  72%|#######2  | 18/25 [00:03<00:01,  5.28it/s]Sampling:  76%|#######6  | 19/25 [00:03<00:01,  5.27it/s]Sampling:  84%|########4 | 21/25 [00:03<00:00,  6.87it/s]Sampling:  92%|#########2| 23/25 [00:03<00:00,  7.97it/s]Sampling: 100%|##########| 25/25 [00:04<00:00,  8.74it/s]Sampling: 100%|##########| 25/25 [00:04<00:00,  6.03it/s]
+[LORA] rung16e1_rembg_uniform_all_qkvo_r4_s6_0f8620e0  epoch 30  psnr 23.227
+
+[TARGET] |delta| at out_layer for 467,264 cubes   mean 2.926  p99 7.271
+
+[ROUTE] knot 12 (t=0.765), blocks [0, 5, 11, 17, 23]
+
+ blk    ||dv||  ||dv||/||v||   ||A@dv||   spread  r vs |delta|
+Traceback (most recent call last):
+  File "/net/projects/ranalab/rajhansini/TRELLIS/experiments/lora_experiments/visibility/measure_attn_route.py", line 484, in <module>
+    main()
+  File "/net/projects/ranalab/rajhansini/TRELLIS/experiments/lora_experiments/visibility/measure_attn_route.py", line 433, in main
+    v_frozen = ca.to_kv(cond)[0, :, 1024:]                    # [L, 1024]
+  File "/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1553, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1562, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/torch/nn/modules/linear.py", line 117, in forward
+    return F.linear(input, self.weight, self.bias)
+RuntimeError: mat1 and mat2 must have the same dtype, but got Float and Half
+[SPARSE] Backend: spconv, Attention: xformers
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/requests/__init__.py:92: RequestsDependencyWarning: Unable to find acceptable character detection dependency (chardet or charset_normalizer).
+  warnings.warn(
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/xformers/ops/fmha/flash.py:211: FutureWarning: `torch.library.impl_abstract` was renamed to `torch.library.register_fake`. Please use that instead; we will remove `torch.library.impl_abstract` in a future version of PyTorch.
+  @torch.library.impl_abstract("xformers_flash::flash_fwd")
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/xformers/ops/fmha/flash.py:344: FutureWarning: `torch.library.impl_abstract` was renamed to `torch.library.register_fake`. Please use that instead; we will remove `torch.library.impl_abstract` in a future version of PyTorch.
+  @torch.library.impl_abstract("xformers_flash::flash_bwd")
+[ATTENTION] Using backend: xformers
+================================================================================================
+ATTENTION ROUTE:  does  A @ dv  predict the out_layer scatter?
+  frame 75   run rung16e1_rembg_uniform_all_qkvo_r4_s6_0f8620e0
+================================================================================================
+[SPARSE][CONV] spconv algo: native
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/spconv/pytorch/functional.py:51: FutureWarning: `torch.cuda.amp.custom_fwd(args...)` is deprecated. Please use `torch.amp.custom_fwd(args..., device_type='cuda')` instead.
+  _TORCH_CUSTOM_FWD = amp.custom_fwd(cast_inputs=torch.float16)
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/spconv/pytorch/functional.py:101: FutureWarning: `torch.cuda.amp.custom_bwd(args...)` is deprecated. Please use `torch.amp.custom_bwd(args..., device_type='cuda')` instead.
+  def backward(ctx, grad_output):
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/spconv/pytorch/functional.py:167: FutureWarning: `torch.cuda.amp.custom_bwd(args...)` is deprecated. Please use `torch.amp.custom_bwd(args..., device_type='cuda')` instead.
+  def backward(ctx, grad_output):
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/spconv/pytorch/functional.py:247: FutureWarning: `torch.cuda.amp.custom_bwd(args...)` is deprecated. Please use `torch.amp.custom_bwd(args..., device_type='cuda')` instead.
+  def backward(ctx, grad_output):
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/spconv/pytorch/functional.py:336: FutureWarning: `torch.cuda.amp.custom_bwd(args...)` is deprecated. Please use `torch.amp.custom_bwd(args..., device_type='cuda')` instead.
+  def backward(ctx, grad_output):
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/spconv/pytorch/functional.py:373: FutureWarning: `torch.cuda.amp.custom_bwd(args...)` is deprecated. Please use `torch.amp.custom_bwd(args..., device_type='cuda')` instead.
+  def backward(ctx, grad_output):
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/spconv/pytorch/functional.py:393: FutureWarning: `torch.cuda.amp.custom_bwd(args...)` is deprecated. Please use `torch.amp.custom_bwd(args..., device_type='cuda')` instead.
+  def backward(ctx, grad_output):
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/spconv/pytorch/functional.py:416: FutureWarning: `torch.cuda.amp.custom_bwd(args...)` is deprecated. Please use `torch.amp.custom_bwd(args..., device_type='cuda')` instead.
+  def backward(ctx, grad_output):
+Using cache found in /home/rajhansini/.cache/torch/hub/facebookresearch_dinov2_main
+/home/rajhansini/.cache/torch/hub/facebookresearch_dinov2_main/dinov2/layers/swiglu_ffn.py:43: UserWarning: xFormers is available (SwiGLU)
+  warnings.warn("xFormers is available (SwiGLU)")
+/home/rajhansini/.cache/torch/hub/facebookresearch_dinov2_main/dinov2/layers/attention.py:27: UserWarning: xFormers is available (Attention)
+  warnings.warn("xFormers is available (Attention)")
+/home/rajhansini/.cache/torch/hub/facebookresearch_dinov2_main/dinov2/layers/block.py:33: UserWarning: xFormers is available (Block)
+  warnings.warn("xFormers is available (Block)")
+Sampling:   0%|          | 0/25 [00:00<?, ?it/s]Sampling:   4%|4         | 1/25 [00:00<00:04,  5.75it/s]Sampling:   8%|8         | 2/25 [00:00<00:04,  5.47it/s]Sampling:  12%|#2        | 3/25 [00:00<00:04,  5.38it/s]Sampling:  16%|#6        | 4/25 [00:00<00:03,  5.34it/s]Sampling:  20%|##        | 5/25 [00:00<00:03,  5.32it/s]Sampling:  24%|##4       | 6/25 [00:01<00:03,  5.31it/s]Sampling:  28%|##8       | 7/25 [00:01<00:03,  5.30it/s]Sampling:  32%|###2      | 8/25 [00:01<00:03,  5.29it/s]Sampling:  36%|###6      | 9/25 [00:01<00:03,  5.29it/s]Sampling:  40%|####      | 10/25 [00:01<00:02,  5.28it/s]Sampling:  44%|####4     | 11/25 [00:02<00:02,  5.28it/s]Sampling:  48%|####8     | 12/25 [00:02<00:02,  5.27it/s]Sampling:  52%|#####2    | 13/25 [00:02<00:02,  5.27it/s]Sampling:  56%|#####6    | 14/25 [00:02<00:02,  5.27it/s]Sampling:  60%|######    | 15/25 [00:02<00:01,  5.27it/s]Sampling:  64%|######4   | 16/25 [00:03<00:01,  5.27it/s]Sampling:  68%|######8   | 17/25 [00:03<00:01,  5.26it/s]Sampling:  72%|#######2  | 18/25 [00:03<00:01,  5.26it/s]Sampling:  76%|#######6  | 19/25 [00:03<00:01,  5.26it/s]Sampling:  84%|########4 | 21/25 [00:03<00:00,  6.84it/s]Sampling:  92%|#########2| 23/25 [00:03<00:00,  7.95it/s]Sampling: 100%|##########| 25/25 [00:04<00:00,  8.72it/s]Sampling: 100%|##########| 25/25 [00:04<00:00,  6.01it/s]
+[LORA] rung16e1_rembg_uniform_all_qkvo_r4_s6_0f8620e0  epoch 30  psnr 23.227
+
+[TARGET] |delta| at out_layer for 467,264 cubes   mean 2.926  p99 7.271
+
+[ROUTE] knot 12 (t=0.765), blocks [0, 5, 11, 17, 23]
+
+ blk    ||dv||  ||dv||/||v||   ||A@dv||   spread  r vs |delta|
+   0   169.494        0.174     13.109    0.130        0.0227
+   5   415.228        0.262      5.211    1.752        0.0222
+  11   279.577        0.169      6.631    1.300       -0.2134
+  17   494.712        0.306     11.538    3.047       -0.0456
+  23  1199.922        1.009     16.979    5.148        0.0171
+
+================================================================================================
+VERDICT
+  strongest block: 11   r = -0.2134
+  ||dv||/||v||   : 0.1689   (how big the value edit is, relative to the values themselves)
+  spread of A@dv : 1.300  on mean 6.631
+  -> A @ dv does NOT predict the out_layer scatter (best |r| = 0.213).
+     the scatter is manufactured downstream, inside the frozen
+     decoder. no adapter-side change reaches it.
+================================================================================================

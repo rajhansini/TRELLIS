@@ -1,0 +1,40 @@
+{
+  "run_dir": "/net/projects/ranalab/rajhansini/TRELLIS/experiments/lora_experiments/runs/rung5_colonly_r4_s6_5d6b1700",
+  "run_id": "c85c888f",
+  "n_fine": 467264,
+  "n_frames": 150,
+  "stride": 1,
+  "color_start": 53,
+  "color_end": 101,
+  "loss_scale": 4096.0,
+  "render_res": 518,
+  "extrinsics": [
+    [
+      1.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      -1.0,
+      0.0
+    ],
+    [
+      0.0,
+      1.0,
+      0.0,
+      2.0
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "frac_visible_any": 0.25491585056841526,
+  "frac_visible_all": 0.1515139193261197,
+  "frac_visible_mean": 0.19265012212938867
+}

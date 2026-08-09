@@ -1,0 +1,15 @@
+E shape          = (1748, 1374)  (N_vox_ca × N_ctx)
+E formulation    = additive log-space mask (A_raw + E)
+assigned entries = 1748  E[v,assigned]=0.0  (logit unchanged)
+masked  entries  = 2400004  E[v,others]=-inf   (exp(-inf)=0, gone in softmax)
+mask fraction    = 0.99927220
+
+What happens at attention time:
+  softmax(A_raw + E) with E[v,assigned]=0, E[v,others]=-inf
+  → non-assigned tokens collapse to 0 in softmax
+  → 100% attention mass routed to assigned token per voxel
+
+Implication for training:
+  If assigned token is correct  → focused, useful signal
+  If assigned token is wrong    → wrong semantic all training long
+  The assignment is FIXED (computed once at frame 75)

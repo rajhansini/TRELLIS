@@ -78,6 +78,9 @@ PHASE0_DIR     = REPO_ROOT / 'experiments' / 'results' / 'phase0'
 OUT_DIR        = REPO_ROOT / 'experiments' / 'results' / 'phase7'
 FRAMES_150_DIR = Path('/net/projects/ranalab/rajhansini/mvadaptornew'
                       '/mvadaptorresults/trellis_150_frames')
+GT_VIDEO_DIR   = Path('/net/projects/ranalab/rajhansini/MV-Adapter-Experimental'
+                      '/outputs/teapot_lava_kling_premium'
+                      '/teapot_lava_kling_premium_front/all_frames_150')
 SLAT_SEQ_DIR   = REPO_ROOT / 'data' / 'dynamic_sequences' / 'trellis_seq'
 PRETRAINED     = 'microsoft/TRELLIS-image-large'
 
@@ -100,18 +103,37 @@ def fixed_coords(device):
 
 
 def load_gt(frame_idx, device):
-    path = FRAMES_150_DIR / f'frame_{frame_idx:04d}' / 'renders' / 'front.png'
+    path = GT_VIDEO_DIR / f'frame_{frame_idx:04d}.png'
     img  = Image.open(path).convert('RGB').resize((RENDER_RES, RENDER_RES), Image.LANCZOS)
     return torch.from_numpy(np.array(img).astype(np.float32) / 255.).permute(2, 0, 1).to(device)
 
 
+def prepare_trellis_renders(out_dir):
+    """Copy trellis_150_frames front.png renders to a flat dir for comparison panel 2."""
+    out_dir.mkdir(parents=True, exist_ok=True)
+    for t in range(1, N_FRAMES + 1):
+        dst = out_dir / f'frame_{t:03d}.png'
+        if dst.exists():
+            continue
+        src = FRAMES_150_DIR / f'frame_{t:04d}' / 'renders' / 'front.png'
+        img = Image.open(src).convert('RGB').resize((RENDER_RES, RENDER_RES), Image.LANCZOS)
+        img.save(dst)
+    print(f'TRELLIS renders ready: {out_dir}')
+
+
 def build_camera():
-    """Returns (extrinsics_list, intrinsics_list) for the front view.
-    yaw=0 (facing +Y axis), pitch=0.25 matches TRELLIS render_video frame-0 convention.
+    """Front view matching GT: eye=(0,0,2), up=(0,1,0).
+    TRELLIS teapot body is along Y, so looking from +Z with Y-up gives the
+    classic front profile matching the MVAdaptor Kaolin front.png render.
     """
-    return render_utils.yaw_pitch_r_fov_to_extrinsics_intrinsics(
-        [0.0], [0.25], 2.0, 40.0,
-    )
+    import utils3d.torch as u3d
+    fov = torch.deg2rad(torch.tensor(40.)).cuda()
+    eye = torch.tensor([0., 0., 2.]).cuda()
+    tgt = torch.zeros(3).cuda()
+    up  = torch.tensor([0., 1., 0.]).cuda()
+    extr = u3d.extrinsics_look_at(eye, tgt, up)
+    intr = u3d.intrinsics_from_fov_xy(fov, fov)
+    return [extr], [intr]
 
 
 def render_feats(pipeline, feats, coords):
@@ -280,6 +302,27 @@ def _split_params(concat, gauss_arrays):
         offset += d
     return out
 
+def _avg_rotation(arr, lo, hi, ref_t):
+    """
+    Quaternion-aware temporal average for _rotation.
+
+    _rotation is stored as (rots - rots_bias) where rots_bias=[1,0,0,0].
+    Reconstructed quaternion: rots = _rotation + [1,0,0,0].
+    q and -q represent the same rotation; naive averaging across a sign flip
+    produces a zero-norm quaternion → NaN covariance → rasterizer overflow.
+    Fix: align all quaternions in the window to the same hemisphere as frame ref_t
+    before averaging.
+    """
+    rots_bias = np.array([1., 0., 0., 0.], dtype=np.float32)
+    window = arr[lo:hi + 1]                             # (W, N, 4)
+    rots   = window + rots_bias                         # (W, N, 4)
+    ref    = rots[ref_t - lo]                           # (N, 4)  — current frame
+    dot    = np.einsum('wnd,nd->wn', rots, ref)         # (W, N)
+    signs  = np.where(dot < 0, -1.0, 1.0)              # (W, N)
+    rots   = rots * signs[:, :, None]                  # flip misaligned quat
+    return rots.mean(axis=0) - rots_bias                # back to _rotation space
+
+
 def temporal_avg(gauss_arrays, k):
     """Simple temporal moving average on all Gaussian params."""
     out = {}
@@ -288,7 +331,10 @@ def temporal_avg(gauss_arrays, k):
         smoothed = np.zeros_like(arr)
         for t in range(T):
             lo, hi = max(0, t - k), min(T - 1, t + k)
-            smoothed[t] = arr[lo:hi + 1].mean(axis=0)
+            if key == '_rotation':
+                smoothed[t] = _avg_rotation(arr, lo, hi, t)
+            else:
+                smoothed[t] = arr[lo:hi + 1].mean(axis=0)
         out[key] = smoothed
     return out
 
@@ -380,10 +426,439 @@ def temporal_spatial_joint(gauss_arrays, k, alpha=2.0, n_per_voxel=32):
         avg = np.zeros_like(arr)
         for t in range(T):
             lo, hi = max(0, t - k), min(T - 1, t + k)
-            avg[t] = arr[lo:hi + 1].mean(axis=0)
+            if key == '_rotation':
+                avg[t] = _avg_rotation(arr, lo, hi, t)
+            else:
+                avg[t] = arr[lo:hi + 1].mean(axis=0)
         smoothed[key] = avg
 
     return smoothed
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Version 5: Temperature-scaled joint attention
+# ─────────────────────────────────────────────────────────────────────────────
+
+def temporal_spatial_joint_v5(gauss_arrays, k, alpha=1.0, temperature=1.0, n_per_voxel=32):
+    """
+    Version 5: Joint temporal+spatial attention with temperature scaling and
+    configurable alpha.
+
+    Sanity check: k=1, alpha=5 → current frame logit dominates → output ≈ unsmoothed.
+    Temperature T controls softmax sharpness:
+      T=1  → standard attention
+      T>1  → flatter distribution  → more smoothing
+      T<1  → sharper (emphasises highest logit)
+    Alpha boosts the current frame's key multiplicatively before dividing by T.
+    """
+    dev     = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    concat  = _concat_params(gauss_arrays)
+    T, N, D = concat.shape
+    V       = N // n_per_voxel
+    data_t  = torch.from_numpy(concat).to(dev)
+
+    a_start, offset = None, 0
+    for key in GAUSS_KEYS:
+        d = gauss_arrays[key][0].reshape(gauss_arrays[key].shape[1], -1).shape[1]
+        if key == '_features_dc':
+            a_start = offset
+        offset += d
+    a_end = D
+
+    vox     = data_t.view(T, V, n_per_voxel, D).mean(dim=2)
+    scale   = D ** -0.5
+    out_vox = torch.zeros_like(vox)
+
+    with torch.no_grad():
+        for t in range(T):
+            lo, hi   = max(0, t - k), min(T - 1, t + k)
+            window   = vox[lo:hi + 1]
+            W        = window.shape[0]
+            q        = vox[t]
+            kv       = window.reshape(W * V, D)
+            t_offset = (t - lo) * V
+            k_boost  = kv.clone()
+            k_boost[t_offset:t_offset + V] *= alpha
+            # temperature scaling: divide logits before softmax
+            scores   = torch.einsum('vd,md->vm', q, k_boost) * scale / temperature
+            attn     = torch.softmax(scores, dim=-1)
+            out_vox[t] = torch.einsum('vm,md->vd', attn, kv)
+
+    appear_delta = (out_vox[..., a_start:a_end] - vox[..., a_start:a_end])
+    appear_delta = appear_delta.unsqueeze(2).expand(T, V, n_per_voxel, a_end - a_start)
+    appear_delta = appear_delta.reshape(T, N, a_end - a_start)
+
+    out = data_t.clone()
+    out[:, :, a_start:a_end] += appear_delta
+
+    out_np   = out.cpu().numpy().astype(np.float32)
+    smoothed = _split_params(out_np, gauss_arrays)
+
+    geom_keys = ['_xyz', '_scaling', '_rotation']
+    for key in geom_keys:
+        arr = gauss_arrays[key]
+        avg = np.zeros_like(arr)
+        for t in range(T):
+            lo, hi = max(0, t - k), min(T - 1, t + k)
+            if key == '_rotation':
+                avg[t] = _avg_rotation(arr, lo, hi, t)
+            else:
+                avg[t] = arr[lo:hi + 1].mean(axis=0)
+        smoothed[key] = avg
+
+    return smoothed
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Version 7: Dual-path spatial + temporal attention — no LoRA, no training
+# ─────────────────────────────────────────────────────────────────────────────
+
+def temporal_spatial_dual_v7(gauss_arrays, k, alpha_temporal=1.0, n_per_voxel=32):
+    """
+    Version 7: Two separate identity-QKV attention paths, combined via alpha_temporal.
+
+    PATH A (Spatial):  frame t unchanged  — vox[t]
+    PATH B (Temporal): frame t attends over window [t-k...t+k] voxels
+
+    Combine (linear blend):
+        out = (1 - alpha_temporal) * vox[t] + alpha_temporal * temporal_out
+
+    alpha_temporal=0 → pure frame t (no smoothing)
+    alpha_temporal=1 → pure temporal attention output
+    alpha_temporal in (0,1) → blend both paths
+
+    Only appearance dims (_features_dc onward) are modified; geometry is
+    temporally averaged (same as v5).
+    """
+    dev    = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    concat = _concat_params(gauss_arrays)
+    T, N, D = concat.shape
+    V      = N // n_per_voxel
+    data_t = torch.from_numpy(concat).to(dev)
+
+    a_start, offset = None, 0
+    for key in GAUSS_KEYS:
+        d = gauss_arrays[key][0].reshape(gauss_arrays[key].shape[1], -1).shape[1]
+        if key == '_features_dc':
+            a_start = offset
+        offset += d
+    a_end = D
+
+    vox   = data_t.view(T, V, n_per_voxel, D).mean(dim=2)  # (T, V, D)
+    scale = D ** -0.5
+    out_vox = torch.zeros_like(vox)
+
+    with torch.no_grad():
+        for t in range(T):
+            q          = vox[t]                                   # (V, D)
+            lo, hi     = max(0, t - k), min(T - 1, t + k)
+            window     = vox[lo:hi + 1]                           # (W, V, D)
+            W          = window.shape[0]
+            kv_temporal = window.reshape(W * V, D)                # (W*V, D)
+            scores_t   = torch.einsum('vd,md->vm', q, kv_temporal) * scale
+            attn_t     = torch.softmax(scores_t, dim=-1)
+            out_temporal = torch.einsum('vm,md->vd', attn_t, kv_temporal)  # (V, D)
+
+            # linear blend: spatial path is just vox[t] itself
+            out_vox[t] = (1.0 - alpha_temporal) * q + alpha_temporal * out_temporal
+
+    appear_delta = (out_vox[..., a_start:a_end] - vox[..., a_start:a_end])
+    appear_delta = appear_delta.unsqueeze(2).expand(T, V, n_per_voxel, a_end - a_start)
+    appear_delta = appear_delta.reshape(T, N, a_end - a_start)
+
+    out = data_t.clone()
+    out[:, :, a_start:a_end] += appear_delta
+
+    out_np   = out.cpu().numpy().astype(np.float32)
+    smoothed = _split_params(out_np, gauss_arrays)
+
+    geom_keys = ['_xyz', '_scaling', '_rotation']
+    for key in geom_keys:
+        arr = np.zeros_like(gauss_arrays[key])
+        for t in range(T):
+            lo, hi = max(0, t - k), min(T - 1, t + k)
+            if key == '_rotation':
+                arr[t] = _avg_rotation(gauss_arrays[key], lo, hi, t)
+            else:
+                arr[t] = gauss_arrays[key][lo:hi + 1].mean(axis=0)
+        smoothed[key] = arr
+
+    return smoothed
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Version 8: Temporal THEN Spatial (V2 from pipeline design)
+# ─────────────────────────────────────────────────────────────────────────────
+
+def temporal_then_spatial_v8(gauss_arrays, k, n_per_voxel=32):
+    """
+    Version 8: Two-stage sequential attention — temporal first, then spatial.
+
+    STAGE 1 (Temporal): each voxel in frame t attends over all voxels across
+        window [t-k...t+k] → produces temporally-blended voxel features blended_vox.
+
+    STAGE 2 (Spatial): each voxel in frame t (original query) attends over
+        blended_vox positions → final spatially-routed output.
+
+    Maps to VERSION 2 in pipeline design.
+    """
+    dev    = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    concat = _concat_params(gauss_arrays)
+    T, N, D = concat.shape
+    V      = N // n_per_voxel
+    data_t = torch.from_numpy(concat).to(dev)
+
+    a_start, offset = None, 0
+    for key in GAUSS_KEYS:
+        d = gauss_arrays[key][0].reshape(gauss_arrays[key].shape[1], -1).shape[1]
+        if key == '_features_dc':
+            a_start = offset
+        offset += d
+    a_end = D
+
+    vox   = data_t.view(T, V, n_per_voxel, D).mean(dim=2)  # (T, V, D)
+    scale = D ** -0.5
+    out_vox = torch.zeros_like(vox)
+
+    with torch.no_grad():
+        for t in range(T):
+            q          = vox[t]                                   # (V, D)
+            lo, hi     = max(0, t - k), min(T - 1, t + k)
+            window     = vox[lo:hi + 1]                           # (W, V, D)
+            W          = window.shape[0]
+            kv_temp    = window.reshape(W * V, D)                 # (W*V, D)
+
+            # STAGE 1: temporal — each voxel attends across window
+            scores1    = torch.einsum('vd,md->vm', q, kv_temp) * scale  # (V, W*V)
+            attn1      = torch.softmax(scores1, dim=-1)
+            blended    = torch.nan_to_num(
+                torch.einsum('vm,md->vd', attn1, kv_temp), nan=0.0)      # (V, D)
+
+            # STAGE 2: spatial — original query attends over blended voxel positions
+            scores2    = torch.einsum('vd,md->vm', q, blended) * scale   # (V, V)
+            attn2      = torch.softmax(scores2, dim=-1)
+            out_vox[t] = torch.nan_to_num(
+                torch.einsum('vm,md->vd', attn2, blended), nan=0.0)      # (V, D)
+
+    appear_delta = (out_vox[..., a_start:a_end] - vox[..., a_start:a_end])
+    appear_delta = appear_delta.clamp(-5.0, 5.0)
+    appear_delta = appear_delta.unsqueeze(2).expand(T, V, n_per_voxel, a_end - a_start)
+    appear_delta = appear_delta.reshape(T, N, a_end - a_start)
+
+    out = data_t.clone()
+    out[:, :, a_start:a_end] += appear_delta
+    out_np   = out.cpu().numpy().astype(np.float32)
+    smoothed = _split_params(out_np, gauss_arrays)
+
+    geom_keys = ['_xyz', '_scaling', '_rotation']
+    for key in geom_keys:
+        arr = np.zeros_like(gauss_arrays[key])
+        for t in range(T):
+            lo, hi = max(0, t - k), min(T - 1, t + k)
+            if key == '_rotation':
+                arr[t] = _avg_rotation(gauss_arrays[key], lo, hi, t)
+            else:
+                arr[t] = gauss_arrays[key][lo:hi + 1].mean(axis=0)
+        smoothed[key] = arr
+
+    return smoothed
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Version 9: Spatial THEN Temporal (V2b from pipeline design)
+# ─────────────────────────────────────────────────────────────────────────────
+
+def spatial_then_temporal_v9(gauss_arrays, k, n_per_voxel=32):
+    """
+    Version 9: Two-stage sequential attention — spatial first, then temporal.
+
+    STAGE 1 (Spatial): each voxel in frame t self-attends over all voxels
+        within frame t only → spatially-refined features spatial_out.
+
+    STAGE 2 (Temporal): use spatially-refined features as query to attend
+        over window [t-k...t+k] → temporally-smoothed output.
+
+    Maps to VERSION 2b in pipeline design.
+    """
+    dev    = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    concat = _concat_params(gauss_arrays)
+    T, N, D = concat.shape
+    V      = N // n_per_voxel
+    data_t = torch.from_numpy(concat).to(dev)
+
+    a_start, offset = None, 0
+    for key in GAUSS_KEYS:
+        d = gauss_arrays[key][0].reshape(gauss_arrays[key].shape[1], -1).shape[1]
+        if key == '_features_dc':
+            a_start = offset
+        offset += d
+    a_end = D
+
+    vox   = data_t.view(T, V, n_per_voxel, D).mean(dim=2)  # (T, V, D)
+    scale = D ** -0.5
+    out_vox = torch.zeros_like(vox)
+
+    with torch.no_grad():
+        for t in range(T):
+            # STAGE 1: spatial self-attention within frame t
+            q_s        = vox[t]                                            # (V, D)
+            scores1    = torch.einsum('vd,md->vm', q_s, q_s) * scale      # (V, V)
+            attn1      = torch.softmax(scores1, dim=-1)
+            spatial_out = torch.nan_to_num(
+                torch.einsum('vm,md->vd', attn1, q_s), nan=0.0)           # (V, D)
+
+            # STAGE 2: temporal — use spatially-refined query over window
+            lo, hi     = max(0, t - k), min(T - 1, t + k)
+            window     = vox[lo:hi + 1]
+            W          = window.shape[0]
+            kv_temp    = window.reshape(W * V, D)                          # (W*V, D)
+            scores2    = torch.einsum('vd,md->vm', spatial_out, kv_temp) * scale  # (V, W*V)
+            attn2      = torch.softmax(scores2, dim=-1)
+            out_vox[t] = torch.nan_to_num(
+                torch.einsum('vm,md->vd', attn2, kv_temp), nan=0.0)       # (V, D)
+
+    appear_delta = (out_vox[..., a_start:a_end] - vox[..., a_start:a_end])
+    appear_delta = appear_delta.clamp(-5.0, 5.0)
+    appear_delta = appear_delta.unsqueeze(2).expand(T, V, n_per_voxel, a_end - a_start)
+    appear_delta = appear_delta.reshape(T, N, a_end - a_start)
+
+    out = data_t.clone()
+    out[:, :, a_start:a_end] += appear_delta
+    out_np   = out.cpu().numpy().astype(np.float32)
+    smoothed = _split_params(out_np, gauss_arrays)
+
+    geom_keys = ['_xyz', '_scaling', '_rotation']
+    for key in geom_keys:
+        arr = np.zeros_like(gauss_arrays[key])
+        for t in range(T):
+            lo, hi = max(0, t - k), min(T - 1, t + k)
+            if key == '_rotation':
+                arr[t] = _avg_rotation(gauss_arrays[key], lo, hi, t)
+            else:
+                arr[t] = gauss_arrays[key][lo:hi + 1].mean(axis=0)
+        smoothed[key] = arr
+
+    return smoothed
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Version 6: LoRA temporal attention — output-supervised
+# ─────────────────────────────────────────────────────────────────────────────
+
+class _LoRALinear(nn.Module):
+    """Identity + low-rank delta: y = x + B(A(x))."""
+    def __init__(self, dim, rank):
+        super().__init__()
+        self.A = nn.Linear(dim, rank, bias=False)
+        self.B = nn.Linear(rank, dim, bias=False)
+        nn.init.kaiming_uniform_(self.A.weight, a=math.sqrt(5))
+        nn.init.zeros_(self.B.weight)   # zero init → starts as identity
+
+    def forward(self, x):
+        return x + self.B(self.A(x))
+
+
+class LoRATemporalModule(nn.Module):
+    """
+    Temporal attention where Q/K/V projections are identity + low-rank delta.
+    Only the LoRA weights (A, B matrices per Q/K/V) are trained.
+    W_out zero-initialised so the module starts as a residual no-op.
+    """
+    def __init__(self, feat_dim: int, rank: int = 4):
+        super().__init__()
+        self.feat_dim = feat_dim
+        self.scale    = feat_dim ** -0.5
+        self.lora_Q   = _LoRALinear(feat_dim, rank)
+        self.lora_K   = _LoRALinear(feat_dim, rank)
+        self.lora_V   = _LoRALinear(feat_dim, rank)
+        self.W_out    = nn.Linear(feat_dim, feat_dim, bias=False)
+        nn.init.zeros_(self.W_out.weight)
+
+    def forward(self, data: torch.Tensor, t: int, k: int,
+                alpha: float = 1.0, temperature: float = 1.0) -> torch.Tensor:
+        T  = data.shape[0]
+        lo, hi = max(0, t - k), min(T - 1, t + k)
+        window = data[lo:hi + 1]                       # (W, N, D)
+        q  = self.lora_Q(data[t])                      # (N, D)
+        ks = self.lora_K(window)                       # (W, N, D)
+        vs = self.lora_V(window)                       # (W, N, D)
+        scores = torch.einsum('nd,wnd->nw', q, ks) * self.scale
+        # alpha boost on current frame then temperature scale
+        scores[:, t - lo] *= alpha
+        scores = scores / temperature
+        attn   = torch.softmax(scores, dim=-1)
+        agg    = torch.einsum('nw,wnd->nd', attn, vs)
+        return self.W_out(agg) + data[t]
+
+
+def train_lora_temporal(gauss_arrays, rep_config, device, k,
+                        n_steps=300, lr=1e-3, lora_rank=4,
+                        alpha=1.0, temperature=1.0, log_every=20):
+    """
+    Version 6: Train LoRA temporal attention supervised on rendered output
+    vs GT video frames (GT_VIDEO_DIR / all_frames_150).  Unlike attn_learned
+    which uses full D×D projections, only rank-r deltas are optimised.
+    Supervision is in rendered pixel space — avoids using flickering TRELLIS
+    latents as a training signal.
+    """
+    concat  = _concat_params(gauss_arrays)
+    T, N, D = concat.shape
+    data_t  = torch.from_numpy(concat).to(device)
+
+    sc_lo, sc_hi = _scaling_slice(gauss_arrays)
+
+    module    = LoRATemporalModule(feat_dim=D, rank=lora_rank).to(device)
+    optimizer = torch.optim.Adam(module.parameters(), lr=lr)
+
+    extr, intr = build_camera()
+    extr_single = extr[0]
+    intr_single = intr[0]
+
+    renderer = GaussianRenderer()
+    renderer.rendering_options.resolution = RENDER_RES
+    renderer.rendering_options.bg_color   = (1.0, 1.0, 1.0)
+    renderer.rendering_options.near       = 0.8
+    renderer.rendering_options.far        = 1.6
+
+    print(f'Training LoRA temporal (rank={lora_rank}, k={k}, '
+          f'alpha={alpha}, T={temperature}, steps={n_steps})')
+    for step in range(n_steps):
+        optimizer.zero_grad()
+        batch_size = min(4, T)
+        frame_losses = []
+        for t in torch.randint(0, T, (batch_size,)).tolist():
+            smoothed_t = module(data_t, t, k, alpha=alpha, temperature=temperature)
+            smoothed_t = torch.cat([
+                smoothed_t[:, :sc_lo],
+                smoothed_t[:, sc_lo:sc_hi].clamp(-10.0, 4.0),
+                smoothed_t[:, sc_hi:],
+            ], dim=1)
+            params_t = _split_concat_to_params(smoothed_t, gauss_arrays, device)
+            g        = np_to_gaussian_from_tensors(params_t, rep_config, device)
+            color    = renderer.render(g, extr_single, intr_single)['color']
+            gt       = load_gt(t + 1, device)   # GT video frame (output space)
+            frame_losses.append(F.mse_loss(color, gt))
+
+        loss = sum(frame_losses) / len(frame_losses)
+        loss.backward()
+        torch.nn.utils.clip_grad_norm_(module.parameters(), max_norm=1.0)
+        optimizer.step()
+
+        if (step + 1) % log_every == 0 or step == 0:
+            print(f'  step={step+1:04d}/{n_steps}  loss={loss.item():.6f}')
+
+    print('Applying LoRA temporal attention to all frames ...')
+    out = torch.zeros_like(data_t)
+    with torch.no_grad():
+        for t in range(T):
+            smoothed_t = module(data_t, t, k, alpha=alpha, temperature=temperature)
+            smoothed_t = torch.cat([
+                smoothed_t[:, :sc_lo],
+                smoothed_t[:, sc_lo:sc_hi].clamp(-10.0, 4.0),
+                smoothed_t[:, sc_hi:],
+            ], dim=1)
+            out[t] = smoothed_t
+    return _split_params(out.detach().cpu().numpy().astype(np.float32), gauss_arrays)
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -547,6 +1022,11 @@ def render_and_save(gauss_arrays, rep_config, device, out_dir, gt_dir,
     """
     torch.cuda.empty_cache()
     extr, intr = build_camera()
+    # Diagnostic: print param stats for frame 1 to catch corruption early
+    _diag = {k: gauss_arrays[k][0] for k in GAUSS_KEYS}
+    for k, v in _diag.items():
+        print(f'  [diag] {k}: min={v.min():.4f} max={v.max():.4f} '
+              f'nan={np.isnan(v).sum()} inf={np.isinf(v).sum()}')
     rows = []
     for t in range(start, end + 1):
         i = t - 1
@@ -604,22 +1084,34 @@ def _rep_config_from_disk():
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--k',        type=int,   default=1,
-                        help='Temporal window half-size (use k=1 for window=3)')
-    parser.add_argument('--mode',     type=str,   default='all',
-                        choices=['avg', 'attn_id', 'joint', 'attn_learned', 'all'],
-                        help='Smoothing mode(s) to run')
-    parser.add_argument('--n_learn',  type=int,   default=200,
-                        help='Training steps for attn_learned')
-    parser.add_argument('--lr',       type=float, default=1e-4)
-    parser.add_argument('--ft_slat',  action='store_true',
-                        help='Also fine-tune z_t features during training')
-    parser.add_argument('--no_phase0', action='store_true',
-                        help='Skip Phase 0 rendering (only do smoothed modes)')
+    parser.add_argument('--k',          type=int,   default=1,
+                        help='Temporal window half-size')
+    parser.add_argument('--mode',       type=str,   default='all',
+                        choices=['avg', 'attn_id', 'joint', 'attn_learned',
+                                 'temp_joint', 'lora_temporal', 'dual_attn',
+                                 'temporal_spatial', 'spatial_temporal', 'all'],
+                        help='Smoothing mode to run')
+    parser.add_argument('--alpha',      type=float, default=1.0,
+                        help='Current-frame key boost (V5/V6). High alpha → less smoothing')
+    parser.add_argument('--temperature', type=float, default=1.0,
+                        help='Softmax temperature (V5/V6). T>1 → smoother, T<1 → sharper')
+    parser.add_argument('--alpha_temporal', type=float, default=1.0,
+                        help='Blend weight for temporal path in dual_attn (V7). '
+                             '0=spatial only, 1=temporal only')
+    parser.add_argument('--lora_rank',  type=int,   default=4,
+                        help='LoRA rank for lora_temporal (V6)')
+    parser.add_argument('--n_learn',    type=int,   default=200,
+                        help='Training steps for attn_learned / lora_temporal')
+    parser.add_argument('--lr',         type=float, default=1e-3)
+    parser.add_argument('--ft_slat',    action='store_true')
+    parser.add_argument('--no_phase0',  action='store_true',
+                        help='Skip Phase 0 rendering')
     args = parser.parse_args()
 
     cache_path = OUT_DIR / 'gaussian_cache.npz'
-    modes_to_run = ['avg', 'attn_id', 'joint', 'attn_learned'] if args.mode == 'all' else [args.mode]
+    ALL_MODES = ['avg', 'attn_id', 'joint', 'attn_learned', 'temp_joint', 'lora_temporal',
+                 'dual_attn', 'temporal_spatial', 'spatial_temporal']
+    modes_to_run = ALL_MODES if args.mode == 'all' else [args.mode]
     needs_pipeline = not cache_path.exists()
 
     render_device = torch.device('cuda')
@@ -674,6 +1166,10 @@ def main():
     gt_dir = OUT_DIR / 'gt'
     gt_dir.mkdir(parents=True, exist_ok=True)
 
+    # ── Prepare TRELLIS flickery renders (panel 2 in all comparison videos) ───
+    trellis_renders_dir = OUT_DIR / 'trellis_renders'
+    prepare_trellis_renders(trellis_renders_dir)
+
     # ── Render Phase 0 baseline ───────────────────────────────────────────────
     if not args.no_phase0:
         p0_dir = OUT_DIR / 'phase0'
@@ -703,7 +1199,7 @@ def main():
         _save_csv(rows, out_dir / 'psnr.csv')
         all_results[tag] = avg_psnr
         make_video(out_dir, 'frame_%03d.png', out_dir / 'render.mp4')
-        _make_comparison_video(gt_dir, OUT_DIR / 'phase0', out_dir, tag)
+        _make_comparison_video(gt_dir, trellis_renders_dir, out_dir, tag)
 
     # ── Mode: attn_id (Version 2) ─────────────────────────────────────────────
     if 'attn_id' in modes_to_run:
@@ -718,7 +1214,7 @@ def main():
         _save_csv(rows, out_dir / 'psnr.csv')
         all_results[tag] = avg_psnr
         make_video(out_dir, 'frame_%03d.png', out_dir / 'render.mp4')
-        _make_comparison_video(gt_dir, OUT_DIR / 'phase0', out_dir, tag)
+        _make_comparison_video(gt_dir, trellis_renders_dir, out_dir, tag)
 
     # ── Mode: joint (Version 3) ───────────────────────────────────────────────
     if 'joint' in modes_to_run:
@@ -733,7 +1229,7 @@ def main():
         _save_csv(rows, out_dir / 'psnr.csv')
         all_results[tag] = avg_psnr
         make_video(out_dir, 'frame_%03d.png', out_dir / 'render.mp4')
-        _make_comparison_video(gt_dir, OUT_DIR / 'phase0', out_dir, tag)
+        _make_comparison_video(gt_dir, trellis_renders_dir, out_dir, tag)
 
     # ── Mode: attn_learned (Version 4 — learned) ─────────────────────────────
     if 'attn_learned' in modes_to_run:
@@ -752,7 +1248,91 @@ def main():
         _save_csv(rows, out_dir / 'psnr.csv')
         all_results[tag] = avg_psnr
         make_video(out_dir, 'frame_%03d.png', out_dir / 'render.mp4')
-        _make_comparison_video(gt_dir, OUT_DIR / 'phase0', out_dir, tag)
+        _make_comparison_video(gt_dir, trellis_renders_dir, out_dir, tag)
+
+    # ── Mode: temp_joint (Version 5) ─────────────────────────────────────────
+    if 'temp_joint' in modes_to_run:
+        tag = f'temp_joint_k{args.k}_a{args.alpha}_t{args.temperature}'
+        out_dir = OUT_DIR / tag
+        out_dir.mkdir(parents=True, exist_ok=True)
+        print(f'\n=== Version 5: temp_joint  k={args.k}  alpha={args.alpha}  T={args.temperature} ===')
+        smoothed = temporal_spatial_joint_v5(
+            gauss_arrays, args.k, alpha=args.alpha, temperature=args.temperature,
+        )
+        rows = render_and_save(smoothed, rep_config, render_device, out_dir, gt_dir)
+        avg_psnr = np.mean([r['psnr'] for r in rows])
+        print(f'{tag}  avg PSNR: {avg_psnr:.2f} dB')
+        _save_csv(rows, out_dir / 'psnr.csv')
+        all_results[tag] = avg_psnr
+        make_video(out_dir, 'frame_%03d.png', out_dir / 'render.mp4')
+        _make_comparison_video(gt_dir, trellis_renders_dir, out_dir, tag)
+
+    # ── Mode: lora_temporal (Version 6) ──────────────────────────────────────
+    if 'lora_temporal' in modes_to_run:
+        tag = f'lora_temporal_k{args.k}_r{args.lora_rank}'
+        out_dir = OUT_DIR / tag
+        out_dir.mkdir(parents=True, exist_ok=True)
+        print(f'\n=== Version 6: lora_temporal  k={args.k}  rank={args.lora_rank} ===')
+        smoothed = train_lora_temporal(
+            gauss_arrays, rep_config, render_device,
+            k=args.k, n_steps=args.n_learn, lr=args.lr,
+            lora_rank=args.lora_rank, alpha=args.alpha, temperature=args.temperature,
+        )
+        torch.cuda.empty_cache()
+        rows = render_and_save(smoothed, rep_config, render_device, out_dir, gt_dir)
+        avg_psnr = np.mean([r['psnr'] for r in rows])
+        print(f'{tag}  avg PSNR: {avg_psnr:.2f} dB')
+        _save_csv(rows, out_dir / 'psnr.csv')
+        all_results[tag] = avg_psnr
+        make_video(out_dir, 'frame_%03d.png', out_dir / 'render.mp4')
+        _make_comparison_video(gt_dir, trellis_renders_dir, out_dir, tag)
+
+    # ── Mode: dual_attn (Version 7) ──────────────────────────────────────────
+    if 'dual_attn' in modes_to_run:
+        tag = f'dual_attn_k{args.k}_at{args.alpha_temporal}'
+        out_dir = OUT_DIR / tag
+        out_dir.mkdir(parents=True, exist_ok=True)
+        print(f'\n=== Version 7: dual_attn  k={args.k}  alpha_temporal={args.alpha_temporal} ===')
+        smoothed = temporal_spatial_dual_v7(
+            gauss_arrays, args.k, alpha_temporal=args.alpha_temporal,
+        )
+        rows = render_and_save(smoothed, rep_config, render_device, out_dir, gt_dir)
+        avg_psnr = np.mean([r['psnr'] for r in rows])
+        print(f'{tag}  avg PSNR: {avg_psnr:.2f} dB')
+        _save_csv(rows, out_dir / 'psnr.csv')
+        all_results[tag] = avg_psnr
+        make_video(out_dir, 'frame_%03d.png', out_dir / 'render.mp4')
+        _make_comparison_video(gt_dir, trellis_renders_dir, out_dir, tag)
+
+    # ── Mode: temporal_spatial (Version 8) ───────────────────────────────────
+    if 'temporal_spatial' in modes_to_run:
+        tag = f'temporal_spatial_k{args.k}'
+        out_dir = OUT_DIR / tag
+        out_dir.mkdir(parents=True, exist_ok=True)
+        print(f'\n=== Version 8: temporal→spatial  k={args.k} ===')
+        smoothed = temporal_then_spatial_v8(gauss_arrays, args.k)
+        rows = render_and_save(smoothed, rep_config, render_device, out_dir, gt_dir)
+        avg_psnr = np.mean([r['psnr'] for r in rows])
+        print(f'{tag}  avg PSNR: {avg_psnr:.2f} dB')
+        _save_csv(rows, out_dir / 'psnr.csv')
+        all_results[tag] = avg_psnr
+        make_video(out_dir, 'frame_%03d.png', out_dir / 'render.mp4')
+        _make_comparison_video(gt_dir, trellis_renders_dir, out_dir, tag)
+
+    # ── Mode: spatial_temporal (Version 9) ───────────────────────────────────
+    if 'spatial_temporal' in modes_to_run:
+        tag = f'spatial_temporal_k{args.k}'
+        out_dir = OUT_DIR / tag
+        out_dir.mkdir(parents=True, exist_ok=True)
+        print(f'\n=== Version 9: spatial→temporal  k={args.k} ===')
+        smoothed = spatial_then_temporal_v9(gauss_arrays, args.k)
+        rows = render_and_save(smoothed, rep_config, render_device, out_dir, gt_dir)
+        avg_psnr = np.mean([r['psnr'] for r in rows])
+        print(f'{tag}  avg PSNR: {avg_psnr:.2f} dB')
+        _save_csv(rows, out_dir / 'psnr.csv')
+        all_results[tag] = avg_psnr
+        make_video(out_dir, 'frame_%03d.png', out_dir / 'render.mp4')
+        _make_comparison_video(gt_dir, trellis_renders_dir, out_dir, tag)
 
     # ── Summary ───────────────────────────────────────────────────────────────
     print('\n=== Summary (avg PSNR across 150 frames) ===')

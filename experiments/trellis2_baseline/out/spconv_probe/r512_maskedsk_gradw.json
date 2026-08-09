@@ -1,0 +1,10 @@
+{
+  "algo": "masked_implicit_gemm_splitk",
+  "grad_weights": true,
+  "resolution": 512,
+  "ok": false,
+  "error": "CompilationError: at 39:12:\n    num_blocks_co = tl.cdiv(Co, B1)\n    num_blocks_ci = tl.cdiv(Ci, B2)\n    block_id = tl.program_id(axis=0)\n    block_id_k = tl.program_id(axis=1)\n    block_id_co = block_id % num_blocks_co\n    block_id_ci = block_id // num_blocks_co % num_blocks_ci\n    block_id_v = block_id // (num_blocks_co * num_blocks_ci)\n\n    # Create pointers for submatrices of A and B.\n    valid_signal_start = tl.load(valid_signal_seg + block_id_v)\n    valid_signal_seglen = tl.load(valid_signal_seg + block_id_v + 1) - valid_signal_start\n    num_k = tl.cdiv(valid_signal_seglen, BK)  # Number of blocks in K dimension\n            ^",
+  "peak_gib": 17.46,
+  "grad_sum": null,
+  "seconds": null
+}

@@ -1,0 +1,31 @@
+{
+  "stage": "5.0",
+  "rank": 4,
+  "seed": 6,
+  "epochs": 30,
+  "lr": 0.0001,
+  "eps": 1e-16,
+  "w_lpips": 0.1,
+  "loss_scale": 4096.0,
+  "held_out": [
+    5,
+    15,
+    25,
+    35,
+    45,
+    55,
+    65,
+    75,
+    85,
+    95,
+    105,
+    115,
+    125,
+    135,
+    145
+  ],
+  "active_blocks": [],
+  "use_head": false,
+  "run_id": "da985400",
+  "label": "rung5_50_r4_s6_da985400"
+}

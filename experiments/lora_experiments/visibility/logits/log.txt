@@ -1,0 +1,66 @@
+[SPARSE] Backend: spconv, Attention: xformers
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/requests/__init__.py:92: RequestsDependencyWarning: Unable to find acceptable character detection dependency (chardet or charset_normalizer).
+  warnings.warn(
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/xformers/ops/fmha/flash.py:211: FutureWarning: `torch.library.impl_abstract` was renamed to `torch.library.register_fake`. Please use that instead; we will remove `torch.library.impl_abstract` in a future version of PyTorch.
+  @torch.library.impl_abstract("xformers_flash::flash_fwd")
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/xformers/ops/fmha/flash.py:344: FutureWarning: `torch.library.impl_abstract` was renamed to `torch.library.register_fake`. Please use that instead; we will remove `torch.library.impl_abstract` in a future version of PyTorch.
+  @torch.library.impl_abstract("xformers_flash::flash_bwd")
+[ATTENTION] Using backend: xformers
+====================================================================================================
+RAW COLOUR LOGITS at out_layer, pre-sigmoid.  frozen vs adapted.
+  frames [1, 30, 60, 75, 90, 120, 150]   run rung15v1_uniform_all_qkvo_r4_s6_2674ec70
+====================================================================================================
+[SPARSE][CONV] spconv algo: native
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/spconv/pytorch/functional.py:51: FutureWarning: `torch.cuda.amp.custom_fwd(args...)` is deprecated. Please use `torch.amp.custom_fwd(args..., device_type='cuda')` instead.
+  _TORCH_CUSTOM_FWD = amp.custom_fwd(cast_inputs=torch.float16)
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/spconv/pytorch/functional.py:101: FutureWarning: `torch.cuda.amp.custom_bwd(args...)` is deprecated. Please use `torch.amp.custom_bwd(args..., device_type='cuda')` instead.
+  def backward(ctx, grad_output):
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/spconv/pytorch/functional.py:167: FutureWarning: `torch.cuda.amp.custom_bwd(args...)` is deprecated. Please use `torch.amp.custom_bwd(args..., device_type='cuda')` instead.
+  def backward(ctx, grad_output):
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/spconv/pytorch/functional.py:247: FutureWarning: `torch.cuda.amp.custom_bwd(args...)` is deprecated. Please use `torch.amp.custom_bwd(args..., device_type='cuda')` instead.
+  def backward(ctx, grad_output):
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/spconv/pytorch/functional.py:336: FutureWarning: `torch.cuda.amp.custom_bwd(args...)` is deprecated. Please use `torch.amp.custom_bwd(args..., device_type='cuda')` instead.
+  def backward(ctx, grad_output):
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/spconv/pytorch/functional.py:373: FutureWarning: `torch.cuda.amp.custom_bwd(args...)` is deprecated. Please use `torch.amp.custom_bwd(args..., device_type='cuda')` instead.
+  def backward(ctx, grad_output):
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/spconv/pytorch/functional.py:393: FutureWarning: `torch.cuda.amp.custom_bwd(args...)` is deprecated. Please use `torch.amp.custom_bwd(args..., device_type='cuda')` instead.
+  def backward(ctx, grad_output):
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/spconv/pytorch/functional.py:416: FutureWarning: `torch.cuda.amp.custom_bwd(args...)` is deprecated. Please use `torch.amp.custom_bwd(args..., device_type='cuda')` instead.
+  def backward(ctx, grad_output):
+Using cache found in /home/rajhansini/.cache/torch/hub/facebookresearch_dinov2_main
+/home/rajhansini/.cache/torch/hub/facebookresearch_dinov2_main/dinov2/layers/swiglu_ffn.py:43: UserWarning: xFormers is available (SwiGLU)
+  warnings.warn("xFormers is available (SwiGLU)")
+/home/rajhansini/.cache/torch/hub/facebookresearch_dinov2_main/dinov2/layers/attention.py:27: UserWarning: xFormers is available (Attention)
+  warnings.warn("xFormers is available (Attention)")
+/home/rajhansini/.cache/torch/hub/facebookresearch_dinov2_main/dinov2/layers/block.py:33: UserWarning: xFormers is available (Block)
+  warnings.warn("xFormers is available (Block)")
+Sampling:   0%|          | 0/25 [00:00<?, ?it/s]Sampling:   4%|4         | 1/25 [00:00<00:02,  9.89it/s]Sampling:  12%|#2        | 3/25 [00:00<00:01, 11.87it/s]Sampling:  20%|##        | 5/25 [00:00<00:01, 12.25it/s]Sampling:  28%|##8       | 7/25 [00:00<00:01, 12.42it/s]Sampling:  36%|###6      | 9/25 [00:00<00:01, 12.51it/s]Sampling:  44%|####4     | 11/25 [00:00<00:01, 12.59it/s]Sampling:  52%|#####2    | 13/25 [00:01<00:00, 12.62it/s]Sampling:  60%|######    | 15/25 [00:01<00:00, 12.60it/s]Sampling:  68%|######8   | 17/25 [00:01<00:00, 12.59it/s]Sampling:  76%|#######6  | 19/25 [00:01<00:00, 12.59it/s]Sampling:  88%|########8 | 22/25 [00:01<00:00, 15.71it/s]Sampling: 100%|##########| 25/25 [00:01<00:00, 18.21it/s]Sampling: 100%|##########| 25/25 [00:01<00:00, 14.18it/s]
+
+[LORA] rung15v1_uniform_all_qkvo_r4_s6_2674ec70  epoch 29  psnr 21.953
+
+frame   model    n_logits    mean    std     p01     p50     p99     max |      >3      >4      >6      >8
+----------------------------------------------------------------------------------------------------------
+    1  frozen  11,214,336  -1.968  0.604  -3.819  -1.873  -0.906   0.017 |   0.00%   0.00%   0.00%   0.00%
+    1 adapted  11,214,336  -0.749  1.093  -2.959  -0.782   2.752   4.880 |   0.56%   0.04%   0.00%   0.00%
+   30  frozen  11,214,336  -1.942  0.799  -3.884  -1.967   0.610   1.918 |   0.00%   0.00%   0.00%   0.00%
+   30 adapted  11,214,336  -0.797  1.290  -3.555  -0.877   2.990   5.312 |   0.98%   0.10%   0.00%   0.00%
+   60  frozen  11,214,336  -2.228  1.532  -4.912  -2.405   1.385   2.510 |   0.00%   0.00%   0.00%   0.00%
+   60 adapted  11,214,336  -1.051  1.746  -4.563  -1.299   3.250   5.292 |   1.71%   0.14%   0.00%   0.00%
+   75  frozen  11,214,336  -2.304  1.742  -5.195  -2.546   1.483   2.569 |   0.00%   0.00%   0.00%   0.00%
+   75 adapted  11,214,336  -1.156  1.918  -4.814  -1.517   3.351   5.705 |   2.14%   0.16%   0.00%   0.00%
+   90  frozen  11,214,336  -2.206  1.876  -5.286  -2.417   1.579   2.602 |   0.00%   0.00%   0.00%   0.00%
+   90 adapted  11,214,336  -1.230  2.015  -4.883  -1.671   3.363   5.681 |   2.26%   0.17%   0.00%   0.00%
+  120  frozen  11,214,336  -2.333  2.135  -5.805  -2.438   1.751   2.937 |   0.00%   0.00%   0.00%   0.00%
+  120 adapted  11,214,336  -1.323  2.232  -5.312  -1.806   3.340   5.069 |   2.30%   0.11%   0.00%   0.00%
+  150  frozen  11,214,336  -2.004  2.108  -5.422  -1.912   1.779   2.927 |   0.00%   0.00%   0.00%   0.00%
+  150 adapted  11,214,336  -1.142  2.238  -4.939  -1.685   3.369   5.079 |   2.61%   0.10%   0.00%   0.00%
+
+====================================================================================================
+VERDICT
+  frozen   p99 1.097   max 2.211   >4: 0.000%
+  adapted  p99 3.202   max 5.288   >4: 0.116%
+
+  p99 logit shift = +2.105
+  rung13's clamp ceiling was 8.0 -> sigmoid 0.9997
+  -> adapted drives many more logits past 4 (sigmoid 0.98). GAIN hypothesis SUPPORTED.
+====================================================================================================

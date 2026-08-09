@@ -1,0 +1,90 @@
+{
+  "run": "rung5_colonly_r4_s6_5d6b1700",
+  "ckpt_epoch": 27,
+  "rows": [
+    {
+      "frame": 1,
+      "n_verts": 217150,
+      "n_visible": 35947,
+      "frac_visible": 0.1655399493437716,
+      "delta_mean_visible": 0.38131260871887207,
+      "delta_mean_invisible": 0.3750324547290802,
+      "delta_std_visible": 0.31537988781929016,
+      "delta_std_invisible": 0.2574588358402252,
+      "ratio_invis_vis": 0.9835301637649536,
+      "r2_delta": {
+        "x": 0.1620657581592816,
+        "y_cameraaxis": 0.00651193999885169,
+        "z_vertical": 0.010106591655937303
+      },
+      "r2_frozen_colour": {
+        "x": 0.055861306783889786,
+        "y_cameraaxis": 0.009312638483209845,
+        "z_vertical": 0.02379260700264685
+      }
+    },
+    {
+      "frame": 50,
+      "n_verts": 215374,
+      "n_visible": 36287,
+      "frac_visible": 0.16848366098043405,
+      "delta_mean_visible": 0.3623591363430023,
+      "delta_mean_invisible": 0.3695791959762573,
+      "delta_std_visible": 0.3024265468120575,
+      "delta_std_invisible": 0.27896010875701904,
+      "ratio_invis_vis": 1.0199251174926758,
+      "r2_delta": {
+        "x": 0.2265277224678902,
+        "y_cameraaxis": 0.010724800974389881,
+        "z_vertical": 0.03166778648683166
+      },
+      "r2_frozen_colour": {
+        "x": 0.000580703557013007,
+        "y_cameraaxis": 4.072810959232509e-05,
+        "z_vertical": 0.02893854682045116
+      }
+    },
+    {
+      "frame": 75,
+      "n_verts": 215472,
+      "n_visible": 36218,
+      "frac_visible": 0.16808680478205984,
+      "delta_mean_visible": 0.3469718098640442,
+      "delta_mean_invisible": 0.36148595809936523,
+      "delta_std_visible": 0.29800716042518616,
+      "delta_std_invisible": 0.2686573565006256,
+      "ratio_invis_vis": 1.0418308973312378,
+      "r2_delta": {
+        "x": 0.21898795673438387,
+        "y_cameraaxis": 0.0057585300249304305,
+        "z_vertical": 0.0324005161514791
+      },
+      "r2_frozen_colour": {
+        "x": 3.912368005232203e-06,
+        "y_cameraaxis": 0.0013410809201993557,
+        "z_vertical": 0.018449841424442948
+      }
+    },
+    {
+      "frame": 150,
+      "n_verts": 214890,
+      "n_visible": 36381,
+      "frac_visible": 0.16930057238587184,
+      "delta_mean_visible": 0.33859336376190186,
+      "delta_mean_invisible": 0.3455142080783844,
+      "delta_std_visible": 0.2517198622226715,
+      "delta_std_invisible": 0.23341970145702362,
+      "ratio_invis_vis": 1.0204399824142456,
+      "r2_delta": {
+        "x": 0.20718082763606782,
+        "y_cameraaxis": 0.008084255289227404,
+        "z_vertical": 0.018885519243920346
+      },
+      "r2_frozen_colour": {
+        "x": 0.0010441449835266736,
+        "y_cameraaxis": 0.00010803850957274985,
+        "z_vertical": 0.004405992005189208
+      }
+    }
+  ]
+}

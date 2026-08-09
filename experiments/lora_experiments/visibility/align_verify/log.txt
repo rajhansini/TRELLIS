@@ -1,0 +1,91 @@
+[SPARSE] Backend: spconv, Attention: xformers
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/requests/__init__.py:92: RequestsDependencyWarning: Unable to find acceptable character detection dependency (chardet or charset_normalizer).
+  warnings.warn(
+GT frame 1   fg 30,007 px   bright 776 px
+mesh /net/projects/ranalab/rajhansini/TRELLIS/render/out/rung19_i_f0001/result_f0001.ply
+     216,772 verts  431,993 faces
+[S8] MeshRenderer: res=518  near=0.5  far=3.0  ssaa=1
+
+==============================================================
+1. RASTERIZED IoU  (the number the splat got wrong)
+   NO alignment     render 28,937 px   IoU 0.9286
+   aligned s=0.89029   render 24,860 px   IoU 0.7496
+   alignment.json recorded  iou_before 0.7596   iou_after 0.9051
+   frame-1 recorded after   0.9180
+
+2. SCALE SWEEP against the RASTERIZED mask (1-D, unconfounded)
+   s 0.840   IoU 0.6822
+   s 0.850   IoU 0.6992
+   s 0.860   IoU 0.7162
+   s 0.870   IoU 0.7306
+   s 0.880   IoU 0.7419
+   s 0.890   IoU 0.7493  <- current
+   s 0.900   IoU 0.7550
+   s 0.910   IoU 0.7584
+   s 0.920   IoU 0.7611
+   s 0.930   IoU 0.7617
+   s 0.940   IoU 0.7607
+   s 0.950   IoU 0.7613
+   s 0.960   IoU 0.7623
+   s 0.970   IoU 0.7626
+   s 0.980   IoU 0.7642
+   s 0.990   IoU 0.7644
+   s 1.000   IoU 0.7648
+   s 1.010   IoU 0.7634
+   s 1.020   IoU 0.7628
+   s 1.030   IoU 0.7602
+   s 1.040   IoU 0.7578
+   s 1.050   IoU 0.7546
+   s 1.060   IoU 0.7500
+   IoU-optimal scale 1.000  (IoU 0.7648)   current 0.89029
+
+3. BRIGHT-REGION IoU from the rasterized colour buffer
+   render bright 559 px   GT bright 776 px
+   bright IoU 0.0168   (splat claimed 0.0135)
+==============================================================
+[SPARSE] Backend: spconv, Attention: xformers
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/requests/__init__.py:92: RequestsDependencyWarning: Unable to find acceptable character detection dependency (chardet or charset_normalizer).
+  warnings.warn(
+GT frame 1   fg 30,007 px   bright 776 px
+mesh /net/projects/ranalab/rajhansini/TRELLIS/render/out/rung19_i_f0001/result_f0001.ply
+     216,772 verts  431,993 faces
+[S8] MeshRenderer: res=518  near=0.5  far=3.0  ssaa=1
+[GATE-double] mesh was already aligned; undone. round-trip max err 1.192e-07
+
+==============================================================
+1. RASTERIZED IoU  (the number the splat got wrong)
+   raw mesh         render 35,227 px   IoU 0.7375
+   aligned s=0.89029   render 28,937 px   IoU 0.9286
+   alignment.json recorded  iou_before 0.7596   iou_after 0.9051
+   frame-1 recorded after   0.9180
+
+2. SCALE SWEEP against the RASTERIZED mask (1-D, unconfounded)
+   s 0.840   IoU 0.8139
+   s 0.850   IoU 0.8434
+   s 0.860   IoU 0.8738
+   s 0.870   IoU 0.9011
+   s 0.880   IoU 0.9216
+   s 0.890   IoU 0.9285  <- current
+   s 0.900   IoU 0.9225
+   s 0.910   IoU 0.9129
+   s 0.920   IoU 0.8982
+   s 0.930   IoU 0.8796
+   s 0.940   IoU 0.8599
+   s 0.950   IoU 0.8398
+   s 0.960   IoU 0.8186
+   s 0.970   IoU 0.7970
+   s 0.980   IoU 0.7756
+   s 0.990   IoU 0.7539
+   s 1.000   IoU 0.7333
+   s 1.010   IoU 0.7156
+   s 1.020   IoU 0.6993
+   s 1.030   IoU 0.6834
+   s 1.040   IoU 0.6688
+   s 1.050   IoU 0.6547
+   s 1.060   IoU 0.6408
+   IoU-optimal scale 0.890  (IoU 0.9285)   current 0.89029
+
+3. BRIGHT-REGION IoU from the rasterized colour buffer
+   render bright 775 px   GT bright 776 px
+   bright IoU 0.1903   (splat claimed 0.0135)
+==============================================================

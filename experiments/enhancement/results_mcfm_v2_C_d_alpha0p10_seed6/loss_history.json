@@ -1,0 +1,162 @@
+[
+  {
+    "epoch": 1,
+    "avg_task_loss": 0.030547001448770365,
+    "lora_B_norm": 1.0204237794472752,
+    "lora_BA_norm": 1.282201737165451,
+    "eff_delta": 0.12822017371654512,
+    "is_best": true
+  },
+  {
+    "epoch": 2,
+    "avg_task_loss": 0.02886234860867262,
+    "lora_B_norm": 1.904796792947667,
+    "lora_BA_norm": 4.196646307284634,
+    "eff_delta": 0.4196646307284634,
+    "is_best": true
+  },
+  {
+    "epoch": 3,
+    "avg_task_loss": 0.02533461435387532,
+    "lora_B_norm": 2.539005967479573,
+    "lora_BA_norm": 7.318033376708627,
+    "eff_delta": 0.7318033376708627,
+    "is_best": true
+  },
+  {
+    "epoch": 4,
+    "avg_task_loss": 0.01938688083241383,
+    "lora_B_norm": 2.951551013573385,
+    "lora_BA_norm": 10.09920180340608,
+    "eff_delta": 1.0099201803406082,
+    "is_best": true
+  },
+  {
+    "epoch": 5,
+    "avg_task_loss": 0.014722304362803697,
+    "lora_B_norm": 3.183312154131866,
+    "lora_BA_norm": 12.222515136003494,
+    "eff_delta": 1.2222515136003496,
+    "is_best": true
+  },
+  {
+    "epoch": 6,
+    "avg_task_loss": 0.012828785901268323,
+    "lora_B_norm": 3.296234126883439,
+    "lora_BA_norm": 13.510883977015814,
+    "eff_delta": 1.3510883977015815,
+    "is_best": true
+  },
+  {
+    "epoch": 7,
+    "avg_task_loss": 0.01189544029533863,
+    "lora_B_norm": 3.3736212531099135,
+    "lora_BA_norm": 14.56644099454085,
+    "eff_delta": 1.456644099454085,
+    "is_best": true
+  },
+  {
+    "epoch": 8,
+    "avg_task_loss": 0.011218090479572614,
+    "lora_B_norm": 3.4318489521674,
+    "lora_BA_norm": 15.369525869687399,
+    "eff_delta": 1.53695258696874,
+    "is_best": true
+  },
+  {
+    "epoch": 9,
+    "avg_task_loss": 0.010325788067032894,
+    "lora_B_norm": 3.4757706244290283,
+    "lora_BA_norm": 15.973357304930687,
+    "eff_delta": 1.5973357304930689,
+    "is_best": true
+  },
+  {
+    "epoch": 10,
+    "avg_task_loss": 0.009742624176045258,
+    "lora_B_norm": 3.5122243864550966,
+    "lora_BA_norm": 16.555998161435127,
+    "eff_delta": 1.6555998161435128,
+    "is_best": true
+  },
+  {
+    "epoch": 11,
+    "avg_task_loss": 0.00920002618804574,
+    "lora_B_norm": 3.5406667469007305,
+    "lora_BA_norm": 17.020485639572144,
+    "eff_delta": 1.7020485639572145,
+    "is_best": true
+  },
+  {
+    "epoch": 12,
+    "avg_task_loss": 0.00876893878603975,
+    "lora_B_norm": 3.563233677170822,
+    "lora_BA_norm": 17.369313716888428,
+    "eff_delta": 1.7369313716888428,
+    "is_best": true
+  },
+  {
+    "epoch": 13,
+    "avg_task_loss": 0.008510526667038599,
+    "lora_B_norm": 3.5821975381779314,
+    "lora_BA_norm": 17.68929086625576,
+    "eff_delta": 1.768929086625576,
+    "is_best": true
+  },
+  {
+    "epoch": 14,
+    "avg_task_loss": 0.008258363114049037,
+    "lora_B_norm": 3.5974965491786017,
+    "lora_BA_norm": 17.907031272848446,
+    "eff_delta": 1.7907031272848446,
+    "is_best": true
+  },
+  {
+    "epoch": 15,
+    "avg_task_loss": 0.008120991603160897,
+    "lora_B_norm": 3.609564238640779,
+    "lora_BA_norm": 18.104053447643917,
+    "eff_delta": 1.8104053447643917,
+    "is_best": true
+  },
+  {
+    "epoch": 16,
+    "avg_task_loss": 0.007966376127054293,
+    "lora_B_norm": 3.62495478790509,
+    "lora_BA_norm": 18.32734514772892,
+    "eff_delta": 1.8327345147728922,
+    "is_best": true
+  },
+  {
+    "epoch": 17,
+    "avg_task_loss": 0.007780993316943447,
+    "lora_B_norm": 3.6386801617006714,
+    "lora_BA_norm": 18.55127163231373,
+    "eff_delta": 1.8551271632313728,
+    "is_best": true
+  },
+  {
+    "epoch": 18,
+    "avg_task_loss": 0.007720148644099633,
+    "lora_B_norm": 3.6514125210810064,
+    "lora_BA_norm": 18.72370607157548,
+    "eff_delta": 1.8723706071575483,
+    "is_best": true
+  },
+  {
+    "epoch": 19,
+    "avg_task_loss": 0.007622597999870777,
+    "lora_B_norm": 3.661335315697882,
+    "lora_BA_norm": 18.887992997964222,
+    "eff_delta": 1.8887992997964222,
+    "is_best": true
+  },
+  {
+    "epoch": 20,
+    "avg_task_loss": 0.007497571858887871,
+    "lora_B_norm": 3.6689612115411876,
+    "lora_BA_norm": 18.989452347159386,
+    "eff_delta": 1.8989452347159386,
+    "is_best": true
+  }
+]

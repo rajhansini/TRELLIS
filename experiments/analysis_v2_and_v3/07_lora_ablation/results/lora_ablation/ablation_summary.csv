@@ -1,0 +1,5 @@
+mode,mcfm_psnr,mcfm_psnr_std,mcfm_flicker,mcfm_lpips,lora_psnr,lora_psnr_std,lora_flicker,lora_lpips,lora_epoch
+v2_C,15.1511,0.3234,0.001112,nan,nan,nan,nan,nan,-1
+v2_D,15.1498,0.3229,0.001018,nan,nan,nan,nan,nan,-1
+v3_C,15.1617,0.3385,0.001216,nan,nan,nan,nan,nan,5
+v3_D,15.1624,0.3367,0.001097,nan,nan,nan,nan,nan,-1

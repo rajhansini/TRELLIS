@@ -1,0 +1,151 @@
+[SPARSE] Backend: spconv, Attention: xformers
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/requests/__init__.py:92: RequestsDependencyWarning: Unable to find acceptable character detection dependency (chardet or charset_normalizer).
+  warnings.warn(
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/xformers/ops/fmha/flash.py:211: FutureWarning: `torch.library.impl_abstract` was renamed to `torch.library.register_fake`. Please use that instead; we will remove `torch.library.impl_abstract` in a future version of PyTorch.
+  @torch.library.impl_abstract("xformers_flash::flash_fwd")
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/xformers/ops/fmha/flash.py:344: FutureWarning: `torch.library.impl_abstract` was renamed to `torch.library.register_fake`. Please use that instead; we will remove `torch.library.impl_abstract` in a future version of PyTorch.
+  @torch.library.impl_abstract("xformers_flash::flash_bwd")
+[ATTENTION] Using backend: xformers
+==========================================================================
+cross-attention correspondence: does the unseen surface read the frame?
+  frames [1, 75, 150]   blocks [0, 11, 23]   knots [0, 12, 24]
+  output /net/projects/ranalab/rajhansini/TRELLIS/experiments/lora_experiments/visibility/xattn_correspondence
+==========================================================================
+[SPARSE][CONV] spconv algo: native
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/spconv/pytorch/functional.py:51: FutureWarning: `torch.cuda.amp.custom_fwd(args...)` is deprecated. Please use `torch.amp.custom_fwd(args..., device_type='cuda')` instead.
+  _TORCH_CUSTOM_FWD = amp.custom_fwd(cast_inputs=torch.float16)
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/spconv/pytorch/functional.py:101: FutureWarning: `torch.cuda.amp.custom_bwd(args...)` is deprecated. Please use `torch.amp.custom_bwd(args..., device_type='cuda')` instead.
+  def backward(ctx, grad_output):
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/spconv/pytorch/functional.py:167: FutureWarning: `torch.cuda.amp.custom_bwd(args...)` is deprecated. Please use `torch.amp.custom_bwd(args..., device_type='cuda')` instead.
+  def backward(ctx, grad_output):
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/spconv/pytorch/functional.py:247: FutureWarning: `torch.cuda.amp.custom_bwd(args...)` is deprecated. Please use `torch.amp.custom_bwd(args..., device_type='cuda')` instead.
+  def backward(ctx, grad_output):
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/spconv/pytorch/functional.py:336: FutureWarning: `torch.cuda.amp.custom_bwd(args...)` is deprecated. Please use `torch.amp.custom_bwd(args..., device_type='cuda')` instead.
+  def backward(ctx, grad_output):
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/spconv/pytorch/functional.py:373: FutureWarning: `torch.cuda.amp.custom_bwd(args...)` is deprecated. Please use `torch.amp.custom_bwd(args..., device_type='cuda')` instead.
+  def backward(ctx, grad_output):
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/spconv/pytorch/functional.py:393: FutureWarning: `torch.cuda.amp.custom_bwd(args...)` is deprecated. Please use `torch.amp.custom_bwd(args..., device_type='cuda')` instead.
+  def backward(ctx, grad_output):
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/spconv/pytorch/functional.py:416: FutureWarning: `torch.cuda.amp.custom_bwd(args...)` is deprecated. Please use `torch.amp.custom_bwd(args..., device_type='cuda')` instead.
+  def backward(ctx, grad_output):
+Using cache found in /home/rajhansini/.cache/torch/hub/facebookresearch_dinov2_main
+/home/rajhansini/.cache/torch/hub/facebookresearch_dinov2_main/dinov2/layers/swiglu_ffn.py:43: UserWarning: xFormers is available (SwiGLU)
+  warnings.warn("xFormers is available (SwiGLU)")
+/home/rajhansini/.cache/torch/hub/facebookresearch_dinov2_main/dinov2/layers/attention.py:27: UserWarning: xFormers is available (Attention)
+  warnings.warn("xFormers is available (Attention)")
+/home/rajhansini/.cache/torch/hub/facebookresearch_dinov2_main/dinov2/layers/block.py:33: UserWarning: xFormers is available (Block)
+  warnings.warn("xFormers is available (Block)")
+Sampling:   0%|          | 0/25 [00:00<?, ?it/s]Sampling:   4%|4         | 1/25 [00:00<00:02,  9.77it/s]Sampling:  12%|#2        | 3/25 [00:00<00:01, 11.88it/s]Sampling:  20%|##        | 5/25 [00:00<00:01, 12.31it/s]Sampling:  28%|##8       | 7/25 [00:00<00:01, 12.49it/s]Sampling:  36%|###6      | 9/25 [00:00<00:01, 12.57it/s]Sampling:  44%|####4     | 11/25 [00:00<00:01, 12.61it/s]Sampling:  52%|#####2    | 13/25 [00:01<00:00, 12.61it/s]Sampling:  60%|######    | 15/25 [00:01<00:00, 12.63it/s]Sampling:  68%|######8   | 17/25 [00:01<00:00, 12.66it/s]Sampling:  76%|#######6  | 19/25 [00:01<00:00, 12.66it/s]Sampling:  88%|########8 | 22/25 [00:01<00:00, 15.83it/s]Sampling: 100%|##########| 25/25 [00:01<00:00, 18.32it/s]Sampling: 100%|##########| 25/25 [00:01<00:00, 14.24it/s]
+
+[VOX] 7301 flow voxels  coords range 0..63 (resolution 64)
+[DINO] 1374 tokens = 5 prefix (CLS/registers) + 1369 patches (37x37)
+[S8] MeshRenderer: res=518  near=0.5  far=3.0  ssaa=1
+
+[GEOM] mesh 215,488 verts   silhouette 28,555 px
+
+[GATE-proj] deciding nvdiffrast row convention from the depth buffer
+  flip_y=True   on-surface fraction=0.0038  median |z - depth|=0.19619
+  flip_y=False  on-surface fraction=0.0785  median |z - depth|=0.08550
+[GATE-proj] PASSED — flip_y=False
+[VIS] cell=0.01391  tau=0.02087 (1.5 cells)
+      on silhouette :  6505 / 7301  (89.1%)
+      VISIBLE       :  2085 / 7301  (28.6%)
+      occluded      :  5216 / 7301  (71.4%)
+Traceback (most recent call last):
+  File "/net/projects/ranalab/rajhansini/TRELLIS/experiments/lora_experiments/visibility/measure_xattn_correspondence.py", line 538, in <module>
+    main()
+  File "/net/projects/ranalab/rajhansini/TRELLIS/experiments/lora_experiments/visibility/measure_xattn_correspondence.py", line 492, in main
+    assert A is not None and A.shape == (N, L), \
+AssertionError: capture failed: got (1748, 1374)
+[SPARSE] Backend: spconv, Attention: xformers
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/requests/__init__.py:92: RequestsDependencyWarning: Unable to find acceptable character detection dependency (chardet or charset_normalizer).
+  warnings.warn(
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/xformers/ops/fmha/flash.py:211: FutureWarning: `torch.library.impl_abstract` was renamed to `torch.library.register_fake`. Please use that instead; we will remove `torch.library.impl_abstract` in a future version of PyTorch.
+  @torch.library.impl_abstract("xformers_flash::flash_fwd")
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/xformers/ops/fmha/flash.py:344: FutureWarning: `torch.library.impl_abstract` was renamed to `torch.library.register_fake`. Please use that instead; we will remove `torch.library.impl_abstract` in a future version of PyTorch.
+  @torch.library.impl_abstract("xformers_flash::flash_bwd")
+[ATTENTION] Using backend: xformers
+==========================================================================
+cross-attention correspondence: does the unseen surface read the frame?
+  frames [1, 75, 150]   blocks [0, 11, 23]   knots [0, 12, 24]
+  output /net/projects/ranalab/rajhansini/TRELLIS/experiments/lora_experiments/visibility/xattn_correspondence
+==========================================================================
+[SPARSE][CONV] spconv algo: native
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/spconv/pytorch/functional.py:51: FutureWarning: `torch.cuda.amp.custom_fwd(args...)` is deprecated. Please use `torch.amp.custom_fwd(args..., device_type='cuda')` instead.
+  _TORCH_CUSTOM_FWD = amp.custom_fwd(cast_inputs=torch.float16)
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/spconv/pytorch/functional.py:101: FutureWarning: `torch.cuda.amp.custom_bwd(args...)` is deprecated. Please use `torch.amp.custom_bwd(args..., device_type='cuda')` instead.
+  def backward(ctx, grad_output):
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/spconv/pytorch/functional.py:167: FutureWarning: `torch.cuda.amp.custom_bwd(args...)` is deprecated. Please use `torch.amp.custom_bwd(args..., device_type='cuda')` instead.
+  def backward(ctx, grad_output):
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/spconv/pytorch/functional.py:247: FutureWarning: `torch.cuda.amp.custom_bwd(args...)` is deprecated. Please use `torch.amp.custom_bwd(args..., device_type='cuda')` instead.
+  def backward(ctx, grad_output):
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/spconv/pytorch/functional.py:336: FutureWarning: `torch.cuda.amp.custom_bwd(args...)` is deprecated. Please use `torch.amp.custom_bwd(args..., device_type='cuda')` instead.
+  def backward(ctx, grad_output):
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/spconv/pytorch/functional.py:373: FutureWarning: `torch.cuda.amp.custom_bwd(args...)` is deprecated. Please use `torch.amp.custom_bwd(args..., device_type='cuda')` instead.
+  def backward(ctx, grad_output):
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/spconv/pytorch/functional.py:393: FutureWarning: `torch.cuda.amp.custom_bwd(args...)` is deprecated. Please use `torch.amp.custom_bwd(args..., device_type='cuda')` instead.
+  def backward(ctx, grad_output):
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/spconv/pytorch/functional.py:416: FutureWarning: `torch.cuda.amp.custom_bwd(args...)` is deprecated. Please use `torch.amp.custom_bwd(args..., device_type='cuda')` instead.
+  def backward(ctx, grad_output):
+Using cache found in /home/rajhansini/.cache/torch/hub/facebookresearch_dinov2_main
+/home/rajhansini/.cache/torch/hub/facebookresearch_dinov2_main/dinov2/layers/swiglu_ffn.py:43: UserWarning: xFormers is available (SwiGLU)
+  warnings.warn("xFormers is available (SwiGLU)")
+/home/rajhansini/.cache/torch/hub/facebookresearch_dinov2_main/dinov2/layers/attention.py:27: UserWarning: xFormers is available (Attention)
+  warnings.warn("xFormers is available (Attention)")
+/home/rajhansini/.cache/torch/hub/facebookresearch_dinov2_main/dinov2/layers/block.py:33: UserWarning: xFormers is available (Block)
+  warnings.warn("xFormers is available (Block)")
+Sampling:   0%|          | 0/25 [00:00<?, ?it/s]Sampling:   4%|4         | 1/25 [00:00<00:02,  9.86it/s]Sampling:  12%|#2        | 3/25 [00:00<00:01, 11.92it/s]Sampling:  20%|##        | 5/25 [00:00<00:01, 12.34it/s]Sampling:  28%|##8       | 7/25 [00:00<00:01, 12.52it/s]Sampling:  36%|###6      | 9/25 [00:00<00:01, 12.54it/s]Sampling:  44%|####4     | 11/25 [00:00<00:01, 12.59it/s]Sampling:  52%|#####2    | 13/25 [00:01<00:00, 12.61it/s]Sampling:  60%|######    | 15/25 [00:01<00:00, 12.59it/s]Sampling:  68%|######8   | 17/25 [00:01<00:00, 12.63it/s]Sampling:  76%|#######6  | 19/25 [00:01<00:00, 12.66it/s]Sampling:  88%|########8 | 22/25 [00:01<00:00, 15.80it/s]Sampling: 100%|##########| 25/25 [00:01<00:00, 18.27it/s]Sampling: 100%|##########| 25/25 [00:01<00:00, 14.23it/s]
+
+[VOX] 7301 flow voxels  coords range 0..63 (resolution 64)
+[DINO] 1374 tokens = 5 prefix (CLS/registers) + 1369 patches (37x37)
+[S8] MeshRenderer: res=518  near=0.5  far=3.0  ssaa=1
+
+[GEOM] mesh 215,484 verts   silhouette 28,554 px
+
+[GATE-proj] deciding nvdiffrast row convention from the depth buffer
+  flip_y=True   on-surface fraction=0.0038  median |z - depth|=0.19622
+  flip_y=False  on-surface fraction=0.0786  median |z - depth|=0.08563
+[GATE-proj] PASSED — flip_y=False
+
+[TOKENS] cross-attention sees 1748 tokens on a 32^3 grid (patch_size=2), NOT the 7301 input voxels at 64^3
+[VIS] cell=0.02782  tau=0.04173 (1.5 cells)
+      on silhouette :  1552 / 1748  (88.8%)
+      VISIBLE       :   544 / 1748  (31.1%)
+      occluded      :  1204 / 1748  (68.9%)
+  f001 k00(t=1.000) blk00  entropy vis=0.7667 occ=0.7794  |  top1p vis=0.0767 occ=0.0671  |  CLSmass vis=0.998 occ=0.997
+  f001 k00(t=1.000) blk11  entropy vis=0.7600 occ=0.7754  |  top1p vis=0.0710 occ=0.0585  |  CLSmass vis=0.610 occ=0.595
+  f001 k00(t=1.000) blk23  entropy vis=0.8514 occ=0.8445  |  top1p vis=0.0328 occ=0.0311  |  CLSmass vis=0.715 occ=0.716
+  f001 k12(t=0.765) blk00  entropy vis=0.7409 occ=0.7567  |  top1p vis=0.0977 occ=0.0862  |  CLSmass vis=0.998 occ=0.997
+  f001 k12(t=0.765) blk11  entropy vis=0.8008 occ=0.8078  |  top1p vis=0.0423 occ=0.0359  |  CLSmass vis=0.691 occ=0.687
+  f001 k12(t=0.765) blk23  entropy vis=0.8628 occ=0.8527  |  top1p vis=0.0208 occ=0.0222  |  CLSmass vis=0.795 occ=0.784
+  f001 k24(t=0.111) blk00  entropy vis=0.6845 occ=0.6857  |  top1p vis=0.1285 occ=0.1240  |  CLSmass vis=0.999 occ=0.999
+  f001 k24(t=0.111) blk11  entropy vis=0.8047 occ=0.8078  |  top1p vis=0.0452 occ=0.0432  |  CLSmass vis=0.900 occ=0.899
+  f001 k24(t=0.111) blk23  entropy vis=0.8993 occ=0.8947  |  top1p vis=0.0146 occ=0.0148  |  CLSmass vis=0.909 occ=0.911
+  f075 k00(t=1.000) blk00  entropy vis=0.8477 occ=0.8548  |  top1p vis=0.0318 occ=0.0327  |  CLSmass vis=0.996 occ=0.996
+  f075 k00(t=1.000) blk11  entropy vis=0.7745 occ=0.8038  |  top1p vis=0.0690 occ=0.0427  |  CLSmass vis=0.577 occ=0.575
+  f075 k00(t=1.000) blk23  entropy vis=0.8788 occ=0.8655  |  top1p vis=0.0183 occ=0.0202  |  CLSmass vis=0.570 occ=0.570
+  f075 k12(t=0.765) blk00  entropy vis=0.8291 occ=0.8377  |  top1p vis=0.0456 occ=0.0466  |  CLSmass vis=0.997 occ=0.997
+  f075 k12(t=0.765) blk11  entropy vis=0.8087 occ=0.8411  |  top1p vis=0.0501 occ=0.0277  |  CLSmass vis=0.651 occ=0.663
+  f075 k12(t=0.765) blk23  entropy vis=0.8944 occ=0.8832  |  top1p vis=0.0137 occ=0.0151  |  CLSmass vis=0.671 occ=0.676
+  f075 k24(t=0.111) blk00  entropy vis=0.7984 occ=0.8054  |  top1p vis=0.0636 occ=0.0669  |  CLSmass vis=0.999 occ=0.999
+  f075 k24(t=0.111) blk11  entropy vis=0.8464 occ=0.8472  |  top1p vis=0.0389 occ=0.0371  |  CLSmass vis=0.890 occ=0.894
+  f075 k24(t=0.111) blk23  entropy vis=0.9213 occ=0.9158  |  top1p vis=0.0096 occ=0.0103  |  CLSmass vis=0.890 occ=0.894
+  f150 k00(t=1.000) blk00  entropy vis=0.8540 occ=0.8594  |  top1p vis=0.0234 occ=0.0247  |  CLSmass vis=0.996 occ=0.996
+  f150 k00(t=1.000) blk11  entropy vis=0.7602 occ=0.7940  |  top1p vis=0.0800 occ=0.0509  |  CLSmass vis=0.599 occ=0.593
+  f150 k00(t=1.000) blk23  entropy vis=0.8703 occ=0.8553  |  top1p vis=0.0225 occ=0.0262  |  CLSmass vis=0.619 occ=0.623
+  f150 k12(t=0.765) blk00  entropy vis=0.8451 occ=0.8500  |  top1p vis=0.0294 occ=0.0316  |  CLSmass vis=0.997 occ=0.996
+  f150 k12(t=0.765) blk11  entropy vis=0.8044 occ=0.8363  |  top1p vis=0.0496 occ=0.0300  |  CLSmass vis=0.662 occ=0.677
+  f150 k12(t=0.765) blk23  entropy vis=0.8851 occ=0.8767  |  top1p vis=0.0181 occ=0.0185  |  CLSmass vis=0.707 occ=0.703
+  f150 k24(t=0.111) blk00  entropy vis=0.8041 occ=0.8097  |  top1p vis=0.0445 occ=0.0466  |  CLSmass vis=0.999 occ=0.999
+  f150 k24(t=0.111) blk11  entropy vis=0.8340 occ=0.8297  |  top1p vis=0.0448 occ=0.0465  |  CLSmass vis=0.897 occ=0.900
+  f150 k24(t=0.111) blk23  entropy vis=0.9076 occ=0.9033  |  top1p vis=0.0120 occ=0.0124  |  CLSmass vis=0.906 occ=0.907
+
+==========================================================================
+HOW TO READ THIS
+  entropy   0 = all attention on one patch, 1 = uniform over 1369.
+            occluded ~= 1.0 means the unseen surface reads NO location.
+  top1_prob mass on the single best patch. Near 1/1369 = 7.3e-04 is flat.
+  CLSmass   attention parked on CLS/registers, i.e. on no location at all.
+
+  wrote /net/projects/ranalab/rajhansini/TRELLIS/experiments/lora_experiments/visibility/xattn_correspondence/correspondence.json
+==========================================================================

@@ -1,0 +1,72 @@
+================================================================================================
+EVAL MATCH  run=rung19_intersection_uniform_all_qkvo_r4_s6_276b5db7  ckpt=lora_best.pt  bright>0.5
+================================================================================================
+[SPARSE][CONV] spconv algo: native
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/spconv/pytorch/functional.py:51: FutureWarning: `torch.cuda.amp.custom_fwd(args...)` is deprecated. Please use `torch.amp.custom_fwd(args..., device_type='cuda')` instead.
+  _TORCH_CUSTOM_FWD = amp.custom_fwd(cast_inputs=torch.float16)
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/spconv/pytorch/functional.py:101: FutureWarning: `torch.cuda.amp.custom_bwd(args...)` is deprecated. Please use `torch.amp.custom_bwd(args..., device_type='cuda')` instead.
+  def backward(ctx, grad_output):
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/spconv/pytorch/functional.py:167: FutureWarning: `torch.cuda.amp.custom_bwd(args...)` is deprecated. Please use `torch.amp.custom_bwd(args..., device_type='cuda')` instead.
+  def backward(ctx, grad_output):
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/spconv/pytorch/functional.py:247: FutureWarning: `torch.cuda.amp.custom_bwd(args...)` is deprecated. Please use `torch.amp.custom_bwd(args..., device_type='cuda')` instead.
+  def backward(ctx, grad_output):
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/spconv/pytorch/functional.py:336: FutureWarning: `torch.cuda.amp.custom_bwd(args...)` is deprecated. Please use `torch.amp.custom_bwd(args..., device_type='cuda')` instead.
+  def backward(ctx, grad_output):
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/spconv/pytorch/functional.py:373: FutureWarning: `torch.cuda.amp.custom_bwd(args...)` is deprecated. Please use `torch.amp.custom_bwd(args..., device_type='cuda')` instead.
+  def backward(ctx, grad_output):
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/spconv/pytorch/functional.py:393: FutureWarning: `torch.cuda.amp.custom_bwd(args...)` is deprecated. Please use `torch.amp.custom_bwd(args..., device_type='cuda')` instead.
+  def backward(ctx, grad_output):
+/net/projects/ranalab/rajhansini/conda_envs/trellis/lib/python3.10/site-packages/spconv/pytorch/functional.py:416: FutureWarning: `torch.cuda.amp.custom_bwd(args...)` is deprecated. Please use `torch.amp.custom_bwd(args..., device_type='cuda')` instead.
+  def backward(ctx, grad_output):
+Using cache found in /home/rajhansini/.cache/torch/hub/facebookresearch_dinov2_main
+/home/rajhansini/.cache/torch/hub/facebookresearch_dinov2_main/dinov2/layers/swiglu_ffn.py:43: UserWarning: xFormers is available (SwiGLU)
+  warnings.warn("xFormers is available (SwiGLU)")
+/home/rajhansini/.cache/torch/hub/facebookresearch_dinov2_main/dinov2/layers/attention.py:27: UserWarning: xFormers is available (Attention)
+  warnings.warn("xFormers is available (Attention)")
+/home/rajhansini/.cache/torch/hub/facebookresearch_dinov2_main/dinov2/layers/block.py:33: UserWarning: xFormers is available (Block)
+  warnings.warn("xFormers is available (Block)")
+Sampling:   0%|          | 0/25 [00:00<?, ?it/s]Sampling:   4%|4         | 1/25 [00:00<00:02,  9.93it/s]Sampling:  12%|#2        | 3/25 [00:00<00:01, 12.06it/s]Sampling:  20%|##        | 5/25 [00:00<00:01, 12.43it/s]Sampling:  28%|##8       | 7/25 [00:00<00:01, 12.55it/s]Sampling:  36%|###6      | 9/25 [00:00<00:01, 12.61it/s]Sampling:  44%|####4     | 11/25 [00:00<00:01, 12.64it/s]Sampling:  52%|#####2    | 13/25 [00:01<00:00, 12.65it/s]Sampling:  60%|######    | 15/25 [00:01<00:00, 12.64it/s]Sampling:  68%|######8   | 17/25 [00:01<00:00, 12.66it/s]Sampling:  76%|#######6  | 19/25 [00:01<00:00, 12.68it/s]Sampling:  88%|########8 | 22/25 [00:01<00:00, 15.82it/s]Sampling: 100%|##########| 25/25 [00:01<00:00, 18.33it/s]Sampling: 100%|##########| 25/25 [00:01<00:00, 14.28it/s]
+[LORA] epoch 30  psnr 22.559  max||B|| 2.1417
+[S8] MeshRenderer: res=518  near=0.5  far=3.0  ssaa=1
+
+  fr tag      silIoU    PSNR  brRnd   brGT  brIoU  chance   p80%   p90%
+------------------------------------------------------------------------------
+   1 frozen   0.9180  13.926      0    776 0.0000  0.0272   0.00   0.00
+   1 rung     0.9286  26.214    774    776 0.1914  0.0268   0.36   0.00
+   5 frozen   0.9179  14.265      0    731 0.0000  0.0256   0.00   0.00
+   5 rung     0.9271  26.223    756    731 0.1906  0.0253   0.34   0.00
+  15 frozen   0.9166  13.877      0    711 0.0000  0.0249   0.00   0.00
+  15 rung     0.9298  25.989    765    711 0.1932  0.0245   1.11   0.00
+  25 frozen   0.9142  13.152      0    706 0.0000  0.0248   0.00   0.00
+  25 rung     0.9278  25.157    718    706 0.1778  0.0242   1.22   0.01
+  35 frozen   0.9111  12.731      0    709 0.0000  0.0249   0.00   0.00
+  35 rung     0.9243  24.277    704    709 0.1914  0.0244   1.14   0.01
+  45 frozen   0.9087  12.058      0    710 0.0000  0.0249   0.00   0.00
+  45 rung     0.9225  23.426    656    710 0.1806  0.0244   1.28   0.06
+  55 frozen   0.9059  11.934      0    727 0.0000  0.0255   0.00   0.00
+  55 rung     0.9213  22.599    633    727 0.2014  0.0249   1.27   0.10
+  65 frozen   0.9064  11.687      0    675 0.0000  0.0236   0.00   0.00
+  65 rung     0.9224  22.506    555    675 0.1953  0.0231   1.11   0.07
+  75 frozen   0.9054  11.674      0    696 0.0000  0.0244   0.00   0.00
+  75 rung     0.9216  22.147    507    696 0.1864  0.0239   0.91   0.07
+  85 frozen   0.9030  11.241      0    735 0.0000  0.0257   0.00   0.00
+  85 rung     0.9200  21.880    482    735 0.1885  0.0252   0.95   0.02
+  95 frozen   0.9003  10.865      0    747 0.0000  0.0262   0.00   0.00
+  95 rung     0.9186  21.835    446    747 0.1847  0.0256   0.80   0.04
+ 105 frozen   0.8985  10.513      0    757 0.0000  0.0265   0.00   0.00
+ 105 rung     0.9160  21.817    419    757 0.1725  0.0260   0.77   0.00
+ 115 frozen   0.8968  10.125      0    788 0.0000  0.0276   0.00   0.00
+ 115 rung     0.9150  21.361    397    788 0.1826  0.0270   0.71   0.01
+ 125 frozen   0.8958   9.840      0    798 0.0000  0.0279   0.00   0.00
+ 125 rung     0.9131  20.901    396    798 0.1694  0.0274   0.65   0.02
+ 135 frozen   0.8942   9.747      0    834 0.0000  0.0292   0.00   0.00
+ 135 rung     0.9108  20.524    380    834 0.1584  0.0286   0.63   0.01
+ 145 frozen   0.8926   9.861      0    824 0.0000  0.0289   0.00   0.00
+ 145 rung     0.9111  19.753    355    824 0.1447  0.0283   0.58   0.00
+
+================================================================================================
+MEANS
+  frozen  silIoU 0.9053   PSNR 11.719   brightIoU 0.0000 (chance 0.0261, 0.0x)   bright      0 px vs GT    745 px   >0.8 0.00%  >0.9 0.00%
+  rung    silIoU 0.9206   PSNR 22.913   brightIoU 0.1818 (chance 0.0256, 7.1x)   bright    559 px vs GT    745 px   >0.8 0.86%  >0.9 0.03%
+
+[DONE] /net/projects/ranalab/rajhansini/TRELLIS/experiments/lora_experiments/visibility/eval_match/eval_match.json

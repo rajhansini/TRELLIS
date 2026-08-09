@@ -1,0 +1,25 @@
+{
+  "tau": 4.0,
+  "rows": [
+    {
+      "model": "frozen",
+      "n": 709798,
+      "n_white": 0,
+      "frac": 0.0,
+      "cn_white": NaN,
+      "cn_rest": 0.25105923414230347,
+      "cn_white_p50": NaN,
+      "cn_rest_p50": 0.2511788308620453
+    },
+    {
+      "model": "adapted",
+      "n": 723604,
+      "n_white": 0,
+      "frac": 0.0,
+      "cn_white": NaN,
+      "cn_rest": 0.2534943222999573,
+      "cn_white_p50": NaN,
+      "cn_rest_p50": 0.2606889307498932
+    }
+  ]
+}

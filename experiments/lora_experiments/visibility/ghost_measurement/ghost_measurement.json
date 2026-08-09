@@ -1,0 +1,118 @@
+{
+  "frames": [
+    1,
+    11,
+    21,
+    31,
+    41,
+    51,
+    61,
+    71,
+    81,
+    91,
+    101,
+    111,
+    121,
+    131,
+    141
+  ],
+  "dilate_px": 2,
+  "rows": [
+    {
+      "name": "frozen decoder",
+      "params": 0,
+      "note": "no adapter",
+      "frac_outside_gt": 0.1818132257162448,
+      "frac_beyond_frozen": 0.0,
+      "frac_detached": 0.0,
+      "n_components": 1.0,
+      "iou_gt": 0.7595767747735955,
+      "area": 34475.13333333333,
+      "verts": 215605.86666666667
+    },
+    {
+      "name": "rung5.3-late  blk 4-7  r4",
+      "params": 196608,
+      "note": "blocks [4, 5, 6, 7] r4 ep30",
+      "frac_outside_gt": 0.2647881002793889,
+      "frac_beyond_frozen": 0.07969706170009785,
+      "frac_detached": 0.0,
+      "n_components": 1.0,
+      "iou_gt": 0.7025982870754502,
+      "area": 39485.4,
+      "verts": 229935.86666666667
+    },
+    {
+      "name": "rung5.3-late  blk 8-11 r4",
+      "params": 196608,
+      "note": "blocks [8, 9, 10, 11] r4 ep30",
+      "frac_outside_gt": 0.28175643777415793,
+      "frac_beyond_frozen": 0.10587397733180048,
+      "frac_detached": 0.00016666652333325132,
+      "n_components": 2.6,
+      "iou_gt": 0.692400992311651,
+      "area": 40848.666666666664,
+      "verts": 280756.0
+    },
+    {
+      "name": "rung5.4       blk 0-11 r4",
+      "params": 589824,
+      "note": "blocks [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] r4 ep29",
+      "frac_outside_gt": 0.2825077982088709,
+      "frac_beyond_frozen": 0.1123159152195445,
+      "frac_detached": 0.00011834721181226045,
+      "n_components": 2.066666666666667,
+      "iou_gt": 0.6955049688759,
+      "area": 41201.86666666667,
+      "verts": 277260.86666666664
+    },
+    {
+      "name": "rung5.5       blk 8-11 r16",
+      "params": 786432,
+      "note": "blocks [8, 9, 10, 11] r16 ep29",
+      "frac_outside_gt": 0.28186389429939745,
+      "frac_beyond_frozen": 0.10934278642310398,
+      "frac_detached": 1.7830520056823693e-05,
+      "n_components": 1.2666666666666666,
+      "iou_gt": 0.6945035491775144,
+      "area": 41032.6,
+      "verts": 269066.0
+    },
+    {
+      "name": "v4            out_layer",
+      "params": 576,
+      "note": "[(53, 101)] r4 ep30",
+      "frac_outside_gt": 0.1818132257162448,
+      "frac_beyond_frozen": 0.0,
+      "frac_detached": 0.0,
+      "n_components": 1.0,
+      "iou_gt": 0.7595767747735955,
+      "area": 34475.13333333333,
+      "verts": 215605.86666666667
+    },
+    {
+      "name": "rung8         out_layer",
+      "params": 576,
+      "note": "[(53, 101)] r4 ep30",
+      "frac_outside_gt": 0.1818132257162448,
+      "frac_beyond_frozen": 0.0,
+      "frac_detached": 0.0,
+      "n_components": 1.0,
+      "iou_gt": 0.7595767747735955,
+      "area": 34475.13333333333,
+      "verts": 215605.86666666667
+    },
+    {
+      "name": "rung9         out_layer+geom",
+      "params": 704,
+      "note": "[(0, 32), (53, 101)] r4 ep12",
+      "frac_outside_gt": 0.2708841131237455,
+      "frac_beyond_frozen": 0.1019144364025583,
+      "frac_detached": 1.639492085351672e-06,
+      "n_components": 1.0666666666666667,
+      "iou_gt": 0.7087268242909078,
+      "area": 40729.933333333334,
+      "verts": 236236.6
+    }
+  ]
+}

@@ -1,0 +1,664 @@
+{
+  "n_vox": 7301,
+  "n_xattn_tokens": 1748,
+  "inner_res": 32,
+  "patch_size": 2,
+  "n_tokens": 1374,
+  "n_prefix": 5,
+  "grid": 37,
+  "flip_y": false,
+  "tau_cells": 1.5,
+  "n_visible": 544,
+  "n_occluded": 1204,
+  "frac_visible": 0.31121280789375305,
+  "results": [
+    {
+      "frame": 1,
+      "knot": 0,
+      "t": 1.0,
+      "block": 0,
+      "visible": {
+        "n": 544,
+        "entropy_mean": 0.7666766047477722,
+        "top1_prob_mean": 0.0766693502664566,
+        "top1_prob_median": 0.07299185544252396,
+        "prefix_mass_mean": 0.9977924227714539,
+        "dist_to_own_median": 12.806248664855957,
+        "own_mass_mean": 0.0011090312618762255
+      },
+      "occluded": {
+        "n": 1204,
+        "entropy_mean": 0.7793561220169067,
+        "top1_prob_mean": 0.06709661334753036,
+        "top1_prob_median": 0.06329987198114395,
+        "prefix_mass_mean": 0.9971453547477722,
+        "dist_to_own_median": 13.45362377166748,
+        "own_mass_mean": 0.0009629966225475073
+      }
+    },
+    {
+      "frame": 1,
+      "knot": 0,
+      "t": 1.0,
+      "block": 11,
+      "visible": {
+        "n": 544,
+        "entropy_mean": 0.7599911689758301,
+        "top1_prob_mean": 0.0709579735994339,
+        "top1_prob_median": 0.061191871762275696,
+        "prefix_mass_mean": 0.6097937226295471,
+        "dist_to_own_median": 6.0,
+        "own_mass_mean": 0.008663405664265156
+      },
+      "occluded": {
+        "n": 1204,
+        "entropy_mean": 0.775420606136322,
+        "top1_prob_mean": 0.05853908881545067,
+        "top1_prob_median": 0.05476270243525505,
+        "prefix_mass_mean": 0.5950168371200562,
+        "dist_to_own_median": 20.02498435974121,
+        "own_mass_mean": 0.006952493917196989
+      }
+    },
+    {
+      "frame": 1,
+      "knot": 0,
+      "t": 1.0,
+      "block": 23,
+      "visible": {
+        "n": 544,
+        "entropy_mean": 0.85141921043396,
+        "top1_prob_mean": 0.03275806084275246,
+        "top1_prob_median": 0.028338253498077393,
+        "prefix_mass_mean": 0.7153802514076233,
+        "dist_to_own_median": 6.4031243324279785,
+        "own_mass_mean": 0.0037900477182120085
+      },
+      "occluded": {
+        "n": 1204,
+        "entropy_mean": 0.8445006012916565,
+        "top1_prob_mean": 0.03109150007367134,
+        "top1_prob_median": 0.026959160342812538,
+        "prefix_mass_mean": 0.7155831456184387,
+        "dist_to_own_median": 6.7082037925720215,
+        "own_mass_mean": 0.004236122127622366
+      }
+    },
+    {
+      "frame": 1,
+      "knot": 12,
+      "t": 0.7647058823529412,
+      "block": 0,
+      "visible": {
+        "n": 544,
+        "entropy_mean": 0.7408925294876099,
+        "top1_prob_mean": 0.09767325967550278,
+        "top1_prob_median": 0.09678464382886887,
+        "prefix_mass_mean": 0.9977619051933289,
+        "dist_to_own_median": 13.038405418395996,
+        "own_mass_mean": 0.0008078478858806193
+      },
+      "occluded": {
+        "n": 1204,
+        "entropy_mean": 0.7566658854484558,
+        "top1_prob_mean": 0.08617658913135529,
+        "top1_prob_median": 0.08432374894618988,
+        "prefix_mass_mean": 0.9972233176231384,
+        "dist_to_own_median": 14.0,
+        "own_mass_mean": 0.000709802086930722
+      }
+    },
+    {
+      "frame": 1,
+      "knot": 12,
+      "t": 0.7647058823529412,
+      "block": 11,
+      "visible": {
+        "n": 544,
+        "entropy_mean": 0.8008098006248474,
+        "top1_prob_mean": 0.042341168969869614,
+        "top1_prob_median": 0.03466710075736046,
+        "prefix_mass_mean": 0.6910224556922913,
+        "dist_to_own_median": 7.8102498054504395,
+        "own_mass_mean": 0.008279267698526382
+      },
+      "occluded": {
+        "n": 1204,
+        "entropy_mean": 0.8078416585922241,
+        "top1_prob_mean": 0.03594490513205528,
+        "top1_prob_median": 0.029798712581396103,
+        "prefix_mass_mean": 0.686725378036499,
+        "dist_to_own_median": 16.278820037841797,
+        "own_mass_mean": 0.006686680484563112
+      }
+    },
+    {
+      "frame": 1,
+      "knot": 12,
+      "t": 0.7647058823529412,
+      "block": 23,
+      "visible": {
+        "n": 544,
+        "entropy_mean": 0.862802267074585,
+        "top1_prob_mean": 0.020777709782123566,
+        "top1_prob_median": 0.01846637949347496,
+        "prefix_mass_mean": 0.794701099395752,
+        "dist_to_own_median": 7.280109882354736,
+        "own_mass_mean": 0.004546604584902525
+      },
+      "occluded": {
+        "n": 1204,
+        "entropy_mean": 0.8526549339294434,
+        "top1_prob_mean": 0.02218487486243248,
+        "top1_prob_median": 0.02004794403910637,
+        "prefix_mass_mean": 0.7844193577766418,
+        "dist_to_own_median": 7.8102498054504395,
+        "own_mass_mean": 0.004584962967783213
+      }
+    },
+    {
+      "frame": 1,
+      "knot": 24,
+      "t": 0.1111111111111112,
+      "block": 0,
+      "visible": {
+        "n": 544,
+        "entropy_mean": 0.6844847202301025,
+        "top1_prob_mean": 0.12845151126384735,
+        "top1_prob_median": 0.12960605323314667,
+        "prefix_mass_mean": 0.9991026520729065,
+        "dist_to_own_median": 13.038405418395996,
+        "own_mass_mean": 0.0008439576486125588
+      },
+      "occluded": {
+        "n": 1204,
+        "entropy_mean": 0.6857466101646423,
+        "top1_prob_mean": 0.12397890537977219,
+        "top1_prob_median": 0.12459758669137955,
+        "prefix_mass_mean": 0.9990999698638916,
+        "dist_to_own_median": 13.601469993591309,
+        "own_mass_mean": 0.0007605524151585996
+      }
+    },
+    {
+      "frame": 1,
+      "knot": 24,
+      "t": 0.1111111111111112,
+      "block": 11,
+      "visible": {
+        "n": 544,
+        "entropy_mean": 0.8046774864196777,
+        "top1_prob_mean": 0.045247938483953476,
+        "top1_prob_median": 0.04396992176771164,
+        "prefix_mass_mean": 0.8998180031776428,
+        "dist_to_own_median": 22.803508758544922,
+        "own_mass_mean": 0.0033391318283975124
+      },
+      "occluded": {
+        "n": 1204,
+        "entropy_mean": 0.8077633380889893,
+        "top1_prob_mean": 0.043237682431936264,
+        "top1_prob_median": 0.04028153419494629,
+        "prefix_mass_mean": 0.8993790745735168,
+        "dist_to_own_median": 23.021728515625,
+        "own_mass_mean": 0.0031495948787778616
+      }
+    },
+    {
+      "frame": 1,
+      "knot": 24,
+      "t": 0.1111111111111112,
+      "block": 23,
+      "visible": {
+        "n": 544,
+        "entropy_mean": 0.899281919002533,
+        "top1_prob_mean": 0.014648555777966976,
+        "top1_prob_median": 0.014025035314261913,
+        "prefix_mass_mean": 0.909349262714386,
+        "dist_to_own_median": 9.05538558959961,
+        "own_mass_mean": 0.0037154858000576496
+      },
+      "occluded": {
+        "n": 1204,
+        "entropy_mean": 0.8947136402130127,
+        "top1_prob_mean": 0.014835427515208721,
+        "top1_prob_median": 0.013919483870267868,
+        "prefix_mass_mean": 0.9111646413803101,
+        "dist_to_own_median": 8.602325439453125,
+        "own_mass_mean": 0.003666527336463332
+      }
+    },
+    {
+      "frame": 75,
+      "knot": 0,
+      "t": 1.0,
+      "block": 0,
+      "visible": {
+        "n": 544,
+        "entropy_mean": 0.8476507663726807,
+        "top1_prob_mean": 0.03183261677622795,
+        "top1_prob_median": 0.0295057725161314,
+        "prefix_mass_mean": 0.9962319731712341,
+        "dist_to_own_median": 12.806248664855957,
+        "own_mass_mean": 0.0009698006324470043
+      },
+      "occluded": {
+        "n": 1204,
+        "entropy_mean": 0.8547868132591248,
+        "top1_prob_mean": 0.03268929943442345,
+        "top1_prob_median": 0.03056270070374012,
+        "prefix_mass_mean": 0.9955451488494873,
+        "dist_to_own_median": 13.45362377166748,
+        "own_mass_mean": 0.0008339277119375765
+      }
+    },
+    {
+      "frame": 75,
+      "knot": 0,
+      "t": 1.0,
+      "block": 11,
+      "visible": {
+        "n": 544,
+        "entropy_mean": 0.7744736671447754,
+        "top1_prob_mean": 0.06897811591625214,
+        "top1_prob_median": 0.06077947840094566,
+        "prefix_mass_mean": 0.5767061710357666,
+        "dist_to_own_median": 3.605551242828369,
+        "own_mass_mean": 0.012453438714146614
+      },
+      "occluded": {
+        "n": 1204,
+        "entropy_mean": 0.8038347363471985,
+        "top1_prob_mean": 0.042716141790151596,
+        "top1_prob_median": 0.03496956080198288,
+        "prefix_mass_mean": 0.5745408535003662,
+        "dist_to_own_median": 5.099019527435303,
+        "own_mass_mean": 0.007655820809304714
+      }
+    },
+    {
+      "frame": 75,
+      "knot": 0,
+      "t": 1.0,
+      "block": 23,
+      "visible": {
+        "n": 544,
+        "entropy_mean": 0.8787991404533386,
+        "top1_prob_mean": 0.01832776889204979,
+        "top1_prob_median": 0.016755320131778717,
+        "prefix_mass_mean": 0.5699917078018188,
+        "dist_to_own_median": 6.7082037925720215,
+        "own_mass_mean": 0.0032714735716581345
+      },
+      "occluded": {
+        "n": 1204,
+        "entropy_mean": 0.8654647469520569,
+        "top1_prob_mean": 0.02017524652183056,
+        "top1_prob_median": 0.017945915460586548,
+        "prefix_mass_mean": 0.5700833797454834,
+        "dist_to_own_median": 6.7082037925720215,
+        "own_mass_mean": 0.0032396428287029266
+      }
+    },
+    {
+      "frame": 75,
+      "knot": 12,
+      "t": 0.7647058823529412,
+      "block": 0,
+      "visible": {
+        "n": 544,
+        "entropy_mean": 0.8291104435920715,
+        "top1_prob_mean": 0.04563286155462265,
+        "top1_prob_median": 0.04511628299951553,
+        "prefix_mass_mean": 0.9968624114990234,
+        "dist_to_own_median": 12.649110794067383,
+        "own_mass_mean": 0.0013803067849949002
+      },
+      "occluded": {
+        "n": 1204,
+        "entropy_mean": 0.8377470374107361,
+        "top1_prob_mean": 0.04660467430949211,
+        "top1_prob_median": 0.04562508314847946,
+        "prefix_mass_mean": 0.9965448379516602,
+        "dist_to_own_median": 13.34166431427002,
+        "own_mass_mean": 0.001144321053288877
+      }
+    },
+    {
+      "frame": 75,
+      "knot": 12,
+      "t": 0.7647058823529412,
+      "block": 11,
+      "visible": {
+        "n": 544,
+        "entropy_mean": 0.8086991310119629,
+        "top1_prob_mean": 0.05012699216604233,
+        "top1_prob_median": 0.04051641374826431,
+        "prefix_mass_mean": 0.6512570977210999,
+        "dist_to_own_median": 3.0,
+        "own_mass_mean": 0.010687313042581081
+      },
+      "occluded": {
+        "n": 1204,
+        "entropy_mean": 0.8411156535148621,
+        "top1_prob_mean": 0.027694538235664368,
+        "top1_prob_median": 0.021640261635184288,
+        "prefix_mass_mean": 0.6633055210113525,
+        "dist_to_own_median": 5.385164737701416,
+        "own_mass_mean": 0.006665579043328762
+      }
+    },
+    {
+      "frame": 75,
+      "knot": 12,
+      "t": 0.7647058823529412,
+      "block": 23,
+      "visible": {
+        "n": 544,
+        "entropy_mean": 0.8944025635719299,
+        "top1_prob_mean": 0.013702813535928726,
+        "top1_prob_median": 0.012289457954466343,
+        "prefix_mass_mean": 0.6706575751304626,
+        "dist_to_own_median": 6.7082037925720215,
+        "own_mass_mean": 0.0034646005369722843
+      },
+      "occluded": {
+        "n": 1204,
+        "entropy_mean": 0.8832433819770813,
+        "top1_prob_mean": 0.015119751915335655,
+        "top1_prob_median": 0.013422418385744095,
+        "prefix_mass_mean": 0.676300585269928,
+        "dist_to_own_median": 7.211102485656738,
+        "own_mass_mean": 0.003338781651109457
+      }
+    },
+    {
+      "frame": 75,
+      "knot": 24,
+      "t": 0.1111111111111112,
+      "block": 0,
+      "visible": {
+        "n": 544,
+        "entropy_mean": 0.7984458208084106,
+        "top1_prob_mean": 0.0635661631822586,
+        "top1_prob_median": 0.0621626116335392,
+        "prefix_mass_mean": 0.9990562200546265,
+        "dist_to_own_median": 13.152946472167969,
+        "own_mass_mean": 0.0011674691922962666
+      },
+      "occluded": {
+        "n": 1204,
+        "entropy_mean": 0.805372953414917,
+        "top1_prob_mean": 0.06691450625658035,
+        "top1_prob_median": 0.06513985246419907,
+        "prefix_mass_mean": 0.9990589022636414,
+        "dist_to_own_median": 14.0,
+        "own_mass_mean": 0.0010367949726060033
+      }
+    },
+    {
+      "frame": 75,
+      "knot": 24,
+      "t": 0.1111111111111112,
+      "block": 11,
+      "visible": {
+        "n": 544,
+        "entropy_mean": 0.8464475870132446,
+        "top1_prob_mean": 0.03891811519861221,
+        "top1_prob_median": 0.03620379418134689,
+        "prefix_mass_mean": 0.8896355628967285,
+        "dist_to_own_median": 24.083189010620117,
+        "own_mass_mean": 0.003736386075615883
+      },
+      "occluded": {
+        "n": 1204,
+        "entropy_mean": 0.8471742272377014,
+        "top1_prob_mean": 0.037140730768442154,
+        "top1_prob_median": 0.035707827657461166,
+        "prefix_mass_mean": 0.8944917917251587,
+        "dist_to_own_median": 25.612497329711914,
+        "own_mass_mean": 0.0029292379040271044
+      }
+    },
+    {
+      "frame": 75,
+      "knot": 24,
+      "t": 0.1111111111111112,
+      "block": 23,
+      "visible": {
+        "n": 544,
+        "entropy_mean": 0.9213146567344666,
+        "top1_prob_mean": 0.009565306827425957,
+        "top1_prob_median": 0.008654391393065453,
+        "prefix_mass_mean": 0.8902678489685059,
+        "dist_to_own_median": 8.602325439453125,
+        "own_mass_mean": 0.002742149168625474
+      },
+      "occluded": {
+        "n": 1204,
+        "entropy_mean": 0.9158121347427368,
+        "top1_prob_mean": 0.01028246246278286,
+        "top1_prob_median": 0.009190376847982407,
+        "prefix_mass_mean": 0.8939070105552673,
+        "dist_to_own_median": 8.602325439453125,
+        "own_mass_mean": 0.0029165265150368214
+      }
+    },
+    {
+      "frame": 150,
+      "knot": 0,
+      "t": 1.0,
+      "block": 0,
+      "visible": {
+        "n": 544,
+        "entropy_mean": 0.8540177345275879,
+        "top1_prob_mean": 0.023416537791490555,
+        "top1_prob_median": 0.02189645916223526,
+        "prefix_mass_mean": 0.996462881565094,
+        "dist_to_own_median": 10.049875259399414,
+        "own_mass_mean": 0.000830405275337398
+      },
+      "occluded": {
+        "n": 1204,
+        "entropy_mean": 0.8593995571136475,
+        "top1_prob_mean": 0.024694034829735756,
+        "top1_prob_median": 0.02243289351463318,
+        "prefix_mass_mean": 0.995873749256134,
+        "dist_to_own_median": 10.440306663513184,
+        "own_mass_mean": 0.000931754766497761
+      }
+    },
+    {
+      "frame": 150,
+      "knot": 0,
+      "t": 1.0,
+      "block": 11,
+      "visible": {
+        "n": 544,
+        "entropy_mean": 0.7601935863494873,
+        "top1_prob_mean": 0.08004909753799438,
+        "top1_prob_median": 0.0641031339764595,
+        "prefix_mass_mean": 0.5994935035705566,
+        "dist_to_own_median": 3.605551242828369,
+        "own_mass_mean": 0.012120532803237438
+      },
+      "occluded": {
+        "n": 1204,
+        "entropy_mean": 0.7939870953559875,
+        "top1_prob_mean": 0.050888776779174805,
+        "top1_prob_median": 0.040713246911764145,
+        "prefix_mass_mean": 0.5927727818489075,
+        "dist_to_own_median": 5.385164737701416,
+        "own_mass_mean": 0.006952315103262663
+      }
+    },
+    {
+      "frame": 150,
+      "knot": 0,
+      "t": 1.0,
+      "block": 23,
+      "visible": {
+        "n": 544,
+        "entropy_mean": 0.8703094124794006,
+        "top1_prob_mean": 0.022473052144050598,
+        "top1_prob_median": 0.01843668334186077,
+        "prefix_mass_mean": 0.619469165802002,
+        "dist_to_own_median": 8.5440034866333,
+        "own_mass_mean": 0.0034798032138496637
+      },
+      "occluded": {
+        "n": 1204,
+        "entropy_mean": 0.8553026914596558,
+        "top1_prob_mean": 0.02624686248600483,
+        "top1_prob_median": 0.02140979841351509,
+        "prefix_mass_mean": 0.6227514147758484,
+        "dist_to_own_median": 9.05538558959961,
+        "own_mass_mean": 0.0032498929649591446
+      }
+    },
+    {
+      "frame": 150,
+      "knot": 12,
+      "t": 0.7647058823529412,
+      "block": 0,
+      "visible": {
+        "n": 544,
+        "entropy_mean": 0.8450958132743835,
+        "top1_prob_mean": 0.029396677389740944,
+        "top1_prob_median": 0.028042860329151154,
+        "prefix_mass_mean": 0.9967717528343201,
+        "dist_to_own_median": 10.0,
+        "own_mass_mean": 0.001160175888799131
+      },
+      "occluded": {
+        "n": 1204,
+        "entropy_mean": 0.8500439524650574,
+        "top1_prob_mean": 0.031643398106098175,
+        "top1_prob_median": 0.029821624979376793,
+        "prefix_mass_mean": 0.9964721202850342,
+        "dist_to_own_median": 10.198039054870605,
+        "own_mass_mean": 0.0011591139482334256
+      }
+    },
+    {
+      "frame": 150,
+      "knot": 12,
+      "t": 0.7647058823529412,
+      "block": 11,
+      "visible": {
+        "n": 544,
+        "entropy_mean": 0.804404079914093,
+        "top1_prob_mean": 0.04963463544845581,
+        "top1_prob_median": 0.03686459735035896,
+        "prefix_mass_mean": 0.6621354818344116,
+        "dist_to_own_median": 4.123105525970459,
+        "own_mass_mean": 0.010958516970276833
+      },
+      "occluded": {
+        "n": 1204,
+        "entropy_mean": 0.8362599015235901,
+        "top1_prob_mean": 0.03000752441585064,
+        "top1_prob_median": 0.024222826585173607,
+        "prefix_mass_mean": 0.6772933602333069,
+        "dist_to_own_median": 6.082762241363525,
+        "own_mass_mean": 0.00619284063577652
+      }
+    },
+    {
+      "frame": 150,
+      "knot": 12,
+      "t": 0.7647058823529412,
+      "block": 23,
+      "visible": {
+        "n": 544,
+        "entropy_mean": 0.8851186633110046,
+        "top1_prob_mean": 0.018136415630578995,
+        "top1_prob_median": 0.015720413997769356,
+        "prefix_mass_mean": 0.7069490551948547,
+        "dist_to_own_median": 9.05538558959961,
+        "own_mass_mean": 0.003530720481649041
+      },
+      "occluded": {
+        "n": 1204,
+        "entropy_mean": 0.8767142295837402,
+        "top1_prob_mean": 0.018523942679166794,
+        "top1_prob_median": 0.015046551823616028,
+        "prefix_mass_mean": 0.7029902338981628,
+        "dist_to_own_median": 8.9442720413208,
+        "own_mass_mean": 0.0033501628786325455
+      }
+    },
+    {
+      "frame": 150,
+      "knot": 24,
+      "t": 0.1111111111111112,
+      "block": 0,
+      "visible": {
+        "n": 544,
+        "entropy_mean": 0.8041161894798279,
+        "top1_prob_mean": 0.044465187937021255,
+        "top1_prob_median": 0.04262293130159378,
+        "prefix_mass_mean": 0.9990572929382324,
+        "dist_to_own_median": 9.433980941772461,
+        "own_mass_mean": 0.0009893709793686867
+      },
+      "occluded": {
+        "n": 1204,
+        "entropy_mean": 0.8096917867660522,
+        "top1_prob_mean": 0.0466197244822979,
+        "top1_prob_median": 0.04350132867693901,
+        "prefix_mass_mean": 0.9990593194961548,
+        "dist_to_own_median": 10.0,
+        "own_mass_mean": 0.0011638628784567118
+      }
+    },
+    {
+      "frame": 150,
+      "knot": 24,
+      "t": 0.1111111111111112,
+      "block": 11,
+      "visible": {
+        "n": 544,
+        "entropy_mean": 0.8339989185333252,
+        "top1_prob_mean": 0.04476490616798401,
+        "top1_prob_median": 0.04397088289260864,
+        "prefix_mass_mean": 0.8971636891365051,
+        "dist_to_own_median": 24.75883674621582,
+        "own_mass_mean": 0.003346930257976055
+      },
+      "occluded": {
+        "n": 1204,
+        "entropy_mean": 0.8296698927879333,
+        "top1_prob_mean": 0.04649814963340759,
+        "top1_prob_median": 0.04596759378910065,
+        "prefix_mass_mean": 0.900013267993927,
+        "dist_to_own_median": 25.553865432739258,
+        "own_mass_mean": 0.002499175723642111
+      }
+    },
+    {
+      "frame": 150,
+      "knot": 24,
+      "t": 0.1111111111111112,
+      "block": 23,
+      "visible": {
+        "n": 544,
+        "entropy_mean": 0.9075687527656555,
+        "top1_prob_mean": 0.012012256309390068,
+        "top1_prob_median": 0.010983284562826157,
+        "prefix_mass_mean": 0.9056603908538818,
+        "dist_to_own_median": 6.7082037925720215,
+        "own_mass_mean": 0.0030467773322016
+      },
+      "occluded": {
+        "n": 1204,
+        "entropy_mean": 0.9033476114273071,
+        "top1_prob_mean": 0.012415650300681591,
+        "top1_prob_median": 0.011467423290014267,
+        "prefix_mass_mean": 0.9072619676589966,
+        "dist_to_own_median": 7.071067810058594,
+        "own_mass_mean": 0.003085449570789933
+      }
+    }
+  ]
+}

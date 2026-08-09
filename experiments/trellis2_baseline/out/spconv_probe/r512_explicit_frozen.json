@@ -1,0 +1,10 @@
+{
+  "algo": "explicit_gemm",
+  "grad_weights": false,
+  "resolution": 512,
+  "ok": false,
+  "error": "RuntimeError: \"flip_cuda\" not implemented for 'UInt32'",
+  "peak_gib": 18.21,
+  "grad_sum": null,
+  "seconds": null
+}

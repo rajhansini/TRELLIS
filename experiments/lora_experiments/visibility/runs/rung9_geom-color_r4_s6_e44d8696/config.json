@@ -1,0 +1,49 @@
+{
+  "variant": "geom_color_outlayer_intersection",
+  "write_blocks": "geom+color",
+  "loss_region": "intersection(live_render_mask & gt_mask)",
+  "rank": 4,
+  "seed": 6,
+  "epochs": 30,
+  "lr": 0.0001,
+  "eps": 1e-16,
+  "w_lpips": 0.1,
+  "loss_scale": 4096.0,
+  "abs_min": -9.0,
+  "abs_max": 8.0,
+  "lambda_reg": 0.0,
+  "gt_bg_thresh": 0.95,
+  "loss_norm": "v4compat",
+  "held_out": [
+    5,
+    15,
+    25,
+    35,
+    45,
+    55,
+    65,
+    75,
+    85,
+    95,
+    105,
+    115,
+    125,
+    135,
+    145
+  ],
+  "coords": "pinned_frame75",
+  "struct_seed": 42,
+  "run_id": "e44d8696",
+  "label": "rung9_geom-color_r4_s6_e44d8696",
+  "blocks": [
+    [
+      0,
+      32
+    ],
+    [
+      53,
+      101
+    ]
+  ],
+  "out_dim": 80
+}

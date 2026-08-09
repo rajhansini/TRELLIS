@@ -1,0 +1,4 @@
+vertices shape=(214882, 3)  min=-0.49998  max=0.49922  mean=-0.02176  std=0.17235  nan=0  inf=0
+vertex_attrs shape=(214882, 6)  min=0.00028  max=0.99888  mean=0.54943  std=0.18714  nan=0  inf=0
+N_vertices = 214882
+N_faces    = 429742

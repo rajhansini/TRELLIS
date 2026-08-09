@@ -1,0 +1,39 @@
+N_vox_input = 7301
+N_vox_ca    = 1748  (cross-attn level, after G_L downsampling)
+N_ctx       = 1374
+
+Attention mass (mean probability per voxel):
+  → CLS  (1 token)    : 0.00051  total
+  → REG  (4 tokens)   : 0.88944  total  (0.22236 avg per REG token)
+  → patches (1369)    : 0.11005  total  (0.0000804 avg per patch)
+
+Max attn to best patch vs best REG per voxel:
+  max patch attn  mean=0.00230  max=0.01267
+  max REG   attn  mean=0.88800  max=0.91600
+  ratio (patch/REG) = 0.0026
+  → ratio > 0.1 means patch signal is meaningful
+  → ratio < 0.01 means patch assignments are noise
+
+Assignment breakdown (argmax over patch tokens only, post-fix):
+  → CLS token (0)     : 0 voxels
+  → REG tokens (1-4)  : 0 voxels
+  → patch tokens (5+) : 1748 voxels
+
+Attention entropy:
+  mean       = 1.0716
+  std        = 0.1411
+  min/max    = 0.8291 / 1.7914
+  max_possible = 7.2255  (perfectly uniform = log(1374))
+  focusedness  = 0.8517  (0=uniform, 1=one-hot)
+
+Top 10 most-assigned patch tokens:
+  token   582  patch[15,22]  →    293 voxels  (16.8%)
+  token   911  patch[24,18]  →    198 voxels  (11.3%)
+  token   544  patch[14,21]  →     56 voxels  (3.2%)
+  token   803  patch[21,21]  →     40 voxels  (2.3%)
+  token   695  patch[18,24]  →     31 voxels  (1.8%)
+  token   545  patch[14,22]  →     29 voxels  (1.7%)
+  token   808  patch[21,26]  →     27 voxels  (1.5%)
+  token   697  patch[18,26]  →     25 voxels  (1.4%)
+  token   658  patch[17,24]  →     24 voxels  (1.4%)
+  token   613  patch[16,16]  →     22 voxels  (1.3%)
