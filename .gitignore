@@ -399,3 +399,40 @@ FodyWeavers.xsd
 experiments/results/
 outputs/
 data/
+
+# ---- Experiment artifacts (large generated outputs, not source) ----
+# Model checkpoints / weights
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+
+# Rendered frames, videos, meshes, tensors
+*.png
+*.jpg
+*.jpeg
+*.mp4
+*.ply
+*.glb
+*.obj
+*.mtl
+*.npz
+*.npy
+*.blend
+*.dump
+
+# Cluster job logs
+*.out
+*.err
+*.log
+
+# Editor/backup cruft
+*.bak
+
+# Python cache
+__pycache__/
+*.pyc
+
+# ---- Keep: paper/writeup figures and analysis plots ----
+!experiments/dynamesh_writeup/*.png
+!experiments/enhancement/per_config/*.png
