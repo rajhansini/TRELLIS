@@ -32,10 +32,17 @@ def cubes_to_verts(num_verts, cubes, value, reduce='mean'):
         reduced[cubes[i][j]][k] += value[i][k]
     """
     M = value.shape[2] # number of channels
-    reduced = torch.zeros(num_verts, M, device=cubes.device)
-    return torch.scatter_reduce(reduced, 0, 
-        cubes.unsqueeze(-1).expand(-1, -1, M).flatten(0, 1), 
-        value.flatten(0, 1), reduce=reduce, include_self=False)
+    idx = cubes.unsqueeze(-1).expand(-1, -1, M).flatten(0, 1)  # [V*8, M]
+    src = value.flatten(0, 1)                                   # [V*8, M]
+    # scatter_add has reliable backward in all PyTorch versions.
+    # scatter_reduce with include_self=False, reduce='mean' had broken/zero backward
+    # in PyTorch 2.0.x, which silently produced all-zero gradients.
+    reduced = torch.zeros(num_verts, M, device=cubes.device, dtype=value.dtype)
+    reduced = reduced.scatter_add(0, idx, src)
+    if reduce == 'mean':
+        cnt = torch.bincount(idx[:, 0], minlength=num_verts).clamp(min=1)
+        reduced = reduced / cnt.float().unsqueeze(1)
+    return reduced
     
 def sparse_cube2verts(coords, feats, training=True):
     new_coords, cubes = construct_voxel_grid(coords)
@@ -47,12 +54,19 @@ def sparse_cube2verts(coords, feats, training=True):
     return new_coords, new_feats, con_loss
     
 
-def get_dense_attrs(coords : torch.Tensor, feats : torch.Tensor, res : int, sdf_init=True):
+def get_dense_attrs(coords : torch.Tensor, feats : torch.Tensor, res : int, sdf_init=True, dtype=None):
     F = feats.shape[-1]
-    dense_attrs = torch.zeros([res] * 3 + [F], device=feats.device)
+    dt = dtype if dtype is not None else torch.float32
+    dense_attrs = torch.zeros([res] * 3 + [F], device=feats.device, dtype=dt)
     if sdf_init:
         dense_attrs[..., 0] = 1 # initial outside sdf value
-    dense_attrs[coords[:, 0], coords[:, 1], coords[:, 2], :] = feats
+    # index_put (non-in-place) preserves gradient from feats through the scatter.
+    # In-place assignment (dense_attrs[idx] = feats) breaks the autograd chain
+    # because the destination tensor has requires_grad=False.
+    dense_attrs = dense_attrs.index_put(
+        (coords[:, 0], coords[:, 1], coords[:, 2]),
+        feats.to(dt)
+    )
     return dense_attrs.reshape(-1, F)
 
 

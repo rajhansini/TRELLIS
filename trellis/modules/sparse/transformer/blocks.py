@@ -71,9 +71,17 @@ class SparseTransformerBlock(nn.Module):
         x = x + h
         return x
 
+    def _forward_ckpt(self, feats: torch.Tensor, x_struct: SparseTensor) -> torch.Tensor:
+        # Checkpoint on plain tensors: x_struct provides sparse layout (not tracked),
+        # feats is the tracked gradient-bearing input/output.
+        return self._forward(x_struct.replace(feats)).feats
+
     def forward(self, x: SparseTensor) -> SparseTensor:
         if self.use_checkpoint:
-            return torch.utils.checkpoint.checkpoint(self._forward, x, use_reentrant=False)
+            out_feats = torch.utils.checkpoint.checkpoint(
+                self._forward_ckpt, x.feats, x, use_reentrant=False
+            )
+            return x.replace(out_feats)
         else:
             return self._forward(x)
 
@@ -146,6 +154,6 @@ class SparseTransformerCrossBlock(nn.Module):
 
     def forward(self, x: SparseTensor, context: torch.Tensor):
         if self.use_checkpoint:
-            return torch.utils.checkpoint.checkpoint(self._forward, x, context, use_reentrant=False)
+            return torch.utils.checkpoint.checkpoint(self._forward, x, context, use_reentrant=True)
         else:
             return self._forward(x, context)

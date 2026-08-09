@@ -106,21 +106,41 @@ class SparseFeatures2Mesh:
         # add sdf bias to verts_attrs
         coords = cubefeats.coords[:, 1:]
         feats = cubefeats.feats
-        
+
+        import os as _os
+        _c2m_diag = _os.environ.get('C2M_DIAG', '0') == '1'
+        def _c(t, name):
+            if _c2m_diag and t is not None:
+                print(f'    [C2M] {name}: req={t.requires_grad} '
+                      f'fn={type(t.grad_fn).__name__ if t.grad_fn else "None"} '
+                      f'dtype={t.dtype}')
+                if t.requires_grad:
+                    def _bh(g, n=name):
+                        mx = g.abs().max().item()
+                        print(f'    [C2M_BWD] {n}: dtype={g.dtype} '
+                              f'max={mx:.3e} mean={g.abs().mean().item():.3e}  '
+                              f'{"<<ZERO!" if mx == 0.0 else "ok"}')
+                    t.register_hook(_bh)
+        _c(feats, 'feats')
+
         sdf, deform, color, weights = [self.get_layout(feats, name) for name in ['sdf', 'deform', 'color', 'weights']]
         sdf += self.sdf_bias
         v_attrs = [sdf, deform, color] if self.use_color else [sdf, deform]
         v_pos, v_attrs, reg_loss = sparse_cube2verts(coords, torch.cat(v_attrs, dim=-1), training=training)
-        v_attrs_d = get_dense_attrs(v_pos, v_attrs, res=self.res+1, sdf_init=True)
-        weights_d = get_dense_attrs(coords, weights, res=self.res, sdf_init=False)
+        _c(v_attrs, 'v_attrs (after scatter)')
+        v_attrs_d = get_dense_attrs(v_pos, v_attrs, res=self.res+1, sdf_init=True)          # fp32 — SDF/deform needs precision
+        _c(v_attrs_d, 'v_attrs_d (after index_put)')
+        weights_d = get_dense_attrs(coords, weights, res=self.res, sdf_init=False, dtype=torch.float16)  # fp16 — halves 256^3 beta tensor
+        _c(weights_d, 'weights_d (after index_put)')
         if self.use_color:
             sdf_d, deform_d, colors_d = v_attrs_d[..., 0], v_attrs_d[..., 1:4], v_attrs_d[..., 4:]
         else:
             sdf_d, deform_d = v_attrs_d[..., 0], v_attrs_d[..., 1:4]
             colors_d = None
-            
+        _c(colors_d, 'colors_d (FlexiCubes input)')
+
         x_nx3 = get_defomed_verts(self.reg_v, deform_d, self.res)
-        
+
         vertices, faces, L_dev, colors = self.mesh_extractor(
             voxelgrid_vertices=x_nx3,
             scalar_field=sdf_d,
@@ -132,6 +152,8 @@ class SparseFeatures2Mesh:
             voxelgrid_colors=colors_d,
             training=training)
         
+        _c(vertices, 'vertices (FlexiCubes output)')
+        _c(colors,   'colors   (FlexiCubes output)')
         mesh = MeshExtractResult(vertices=vertices, faces=faces, vertex_attrs=colors, res=self.res)
         if training:
             if mesh.success:
