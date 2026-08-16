@@ -436,3 +436,7 @@ __pycache__/
 # ---- Keep: paper/writeup figures and analysis plots ----
 !experiments/dynamesh_writeup/*.png
 !experiments/enhancement/per_config/*.png
+
+# generated experiment output — checkpoints and caches, reproducible, 100MB+ each
+experiments/lora_experiments/runs/
+**/slat_cache.npz
