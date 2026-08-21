@@ -152,7 +152,75 @@ def mcfm_v3(
 # Dispatcher
 # ─────────────────────────────────────────────────────────────────────────────
 
+# ─────────────────────────────────────────────────────────────────────────────
+# Temporal THEN Spatial — the mode that was missing
+# ─────────────────────────────────────────────────────────────────────────────
+
+def mcfm_temporal_then_spatial(
+    tokens: dict,
+    window_indices: list,
+    frame_idx_t: int,
+    lambda_vec: torch.Tensor,
+) -> tuple[torch.Tensor, torch.Tensor]:
+    """
+    Stage 1: per-position temporal blend  (identical to mcfm_v2).
+    Stage 2: EXPLICIT spatial attention of frame_t against the blended K,V.
+
+    WHY THIS EXISTS. Until now the set was asymmetric: mcfm_v2b did
+    spatial->temporal with two explicit stages, but its counterpart mcfm_v2 did
+    temporal ONLY, with no spatial stage at all -- spatial mixing was left to the
+    frozen model's own cross-attention. Comparing those two answers "one stage or
+    two", NOT "which order", which is what the phase7/phase8 write-ups claimed.
+
+    This is the true mirror of mcfm_v2b, and it matches what phase8's
+    slat_temporal_then_spatial_v2 does at the SLaT level. With it the 2x2 is
+    complete and the ordering question is finally testable at the token level.
+    """
+    all_tokens = _stack_window(tokens, window_indices)      # (W, N, 1024)
+    query_t    = _get_tokens(tokens, frame_idx_t)           # (N, 1024)
+
+    # Stage 1: temporal, per position (same math as mcfm_v2)
+    Q  = query_t.unsqueeze(1)                               # (N, 1, D)
+    K  = all_tokens.permute(1, 0, 2)                        # (N, W, D)
+    at = torch.softmax(torch.bmm(Q, K.transpose(1, 2)) * _SCALE, dim=-1)
+    kv = torch.bmm(at, K).squeeze(1)                        # (N, D) blended K,V
+
+    # Stage 2: spatial, frame_t queries the temporally-blended bank
+    sc = torch.mm(query_t, kv.T) * _SCALE                   # (N, N)
+    sp = torch.softmax(sc, dim=-1)
+    blended = torch.mm(sp, kv)                              # (N, D)
+    return blended, blended
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Registry
+# ─────────────────────────────────────────────────────────────────────────────
+# Readable names are the ones to use. The short codes stay as aliases because
+# blending_no_lora_no_enhancement/run.py, enhancement/step06_*, step07d_*,
+# step10_* and phase_b_baseline/run.py all import mcfm_v1/v2/v2b/v3 BY NAME, and
+# every result already on disk is labelled with them. Renaming outright would
+# break those call sites and orphan the results.
+#
+#   temporal_only          token j over token j across the window; NO spatial stage
+#                          (spatial mixing left to the model's own cross-attention)
+#   temporal_then_spatial  temporal blend, then explicit spatial attention
+#   spatial_then_temporal  explicit spatial self-attention, then temporal blend
+#   joint_spatiotemporal   one softmax over all W*N tokens: time and space together
+#   avg                    fixed weighted sum, no attention (baseline)
+
+mcfm_temporal_only        = mcfm_v2
+mcfm_spatial_then_temporal = mcfm_v2b
+mcfm_joint_spatiotemporal = mcfm_v3
+mcfm_avg                  = mcfm_v1
+
 VERSIONS = {
+    # readable
+    'avg'                   : mcfm_v1,
+    'temporal_only'         : mcfm_v2,
+    'temporal_then_spatial' : mcfm_temporal_then_spatial,
+    'spatial_then_temporal' : mcfm_v2b,
+    'joint_spatiotemporal'  : mcfm_v3,
+    # legacy aliases — do not remove, they are on disk in every result label
     'v1' : mcfm_v1,
     'v2' : mcfm_v2,
     'v2b': mcfm_v2b,

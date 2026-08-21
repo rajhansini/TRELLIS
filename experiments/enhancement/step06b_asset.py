@@ -175,6 +175,24 @@ def smooth_c_v3(tok_curr, tok_next):
     pool = torch.cat([tok_curr, tok_next], dim=0)
     attn = torch.softmax(torch.mm(tok_curr, pool.T) * _SCALE, dim=-1)
     return torch.mm(attn, pool), attn
+def smooth_d_v2b(tok_prev, tok_curr, tok_next):
+    """spatial_then_temporal: spatial self-attention over frame t's tokens first,
+    then the per-position temporal blend using those refined tokens as the query.
+
+    Delegates to step4_mcfm.mcfm.mcfm_v2b rather than reimplementing it -- the two
+    copies of v2/v3 in this file already match mcfm.py by hand, and a third
+    hand-copy is how they eventually stop matching.
+    """
+    import sys as _s
+    from pathlib import Path as _P
+    _s.path.insert(0, str(_P(__file__).resolve().parent.parent /
+                           'dynamic_texture_trellis_pipeline'))
+    from step4_mcfm.mcfm import mcfm_v2b as _v2b
+    toks = {0: {'tokens': tok_prev}, 1: {'tokens': tok_curr}, 2: {'tokens': tok_next}}
+    out, _ = _v2b(toks, [0, 1, 2], 1, None)
+    return out, None
+
+
 def smooth_d_v3(tok_prev, tok_curr, tok_next):
     pool = torch.cat([tok_prev, tok_curr, tok_next], dim=0)
     attn = torch.softmax(torch.mm(tok_curr, pool.T) * _SCALE, dim=-1)
@@ -359,8 +377,11 @@ def main():
 
     if phase not in ('raw', 'c', 'd'):
         raise ValueError(f'--phase must be raw/c/d, got {phase}')
-    if phase != 'raw' and variant not in ('v1', 'v2', 'v3'):
-        raise ValueError(f'--variant must be v1/v2/v3')
+    if phase != 'raw' and variant not in ('v1', 'v2', 'v2b', 'v3'):
+        raise ValueError(f'--variant must be v1/v2/v2b/v3')
+    if variant == 'v2b' and phase != 'd':
+        raise ValueError('v2b (spatial_then_temporal) is implemented for phase d '
+                         '[t-1,t,t+1] only; phase c has no v2b path.')
     if phase == 'c' and variant == 'v1' and config not in PHASE_C_V1:
         raise ValueError(f'--config must be one of {list(PHASE_C_V1.keys())}')
     if phase == 'd' and variant == 'v1' and config not in PHASE_D_V1:
@@ -451,6 +472,9 @@ def main():
             if i == start:
                 aw = attn_w.mean(0)
                 print(f'  [D v2 wire frame {i}] attn prev={aw[0]:.4f}  curr={aw[1]:.4f}  next={aw[2]:.4f}')
+        elif phase == 'd' and variant == 'v2b':
+            smoothed, _ = smooth_d_v2b(raw_tokens[max(1,i-1)].to(DEVICE), tok_curr,
+                                       raw_tokens[min(N_FRAMES,i+1)].to(DEVICE))
         elif phase == 'd' and variant == 'v3':
             smoothed, _ = smooth_d_v3(raw_tokens[max(1,i-1)].to(DEVICE), tok_curr,
                                       raw_tokens[min(N_FRAMES,i+1)].to(DEVICE))
